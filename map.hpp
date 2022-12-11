@@ -4,13 +4,10 @@
 # include <memory>
 # include <algorithm>
 # include <stdexcept>
-// # include <iterator>
 
 // # include "IteratorMap.hpp"
 # include "equal.hpp"
-// # include <list>
 # include "pair.hpp"
-// # include "RBtree.hpp"
 
 
 
@@ -139,11 +136,11 @@ namespace   ft {
 				typedef					ft::pair<const Key, T>										pair_type;
 				typedef typename		ft::conditional<IsRConst, const pair_type, pair_type>::type	value_type;
 				typedef typename		ft::conditional<IsRConst, const node, node>::type			node_type;
-				// typedef value_type*										pointer;
-				// typedef const value_type*								const_pointer;
-				// typedef value_type&										reference;
-				// typedef const value_type&								const_reference;
-				// typedef std::bidirectional_iterator_tag					reverse_iterator_category;
+				typedef value_type*										pointer;
+				typedef const value_type*								const_pointer;
+				typedef value_type&										reference;
+				typedef const value_type&								const_reference;
+				typedef std::bidirectional_iterator_tag					reverse_iterator_category;
 				typedef IteratorMap<IsRConst>					iterator;
 			
 			private:
@@ -179,45 +176,6 @@ namespace   ft {
 				// value_type &	operator*	(void) const	{ return (it.base()->data); }
 				// value_type *	operator->	(void) const	{ return (&it.base()->data); }
 				node_type  * 	getPtr		(void) const    { return ptr;         };
-
-			// private:
-
-			// 	void nextNode()
-			// 	{
-			// 		if (ptr->nil)
-			// 			return ;
-			// 		if (!ptr->right->nil)
-			// 		{
-			// 			ptr = ptr->right;
-			// 			while (!ptr->nil && !ptr->left->nil)
-			// 				ptr = ptr->left;
-			// 		}
-			// 		else
-			// 		{
-			// 			node_type *tmp = ptr;
-			// 			while (tmp->parent && tmp == tmp->parent->right)
-			// 				tmp = tmp->parent;
-			// 			if (tmp->parent)
-			// 				ptr = tmp->parent;
-			// 			else
-			// 				ptr = ptr->right;
-			// 		}
-			// 	};
-
-			// 	void prevNode()
-			// 	{
-			// 		node_type *				tmp = ptr;
-
-			// 		if (!ptr->nil && !ptr->left->nil)
-			// 			ptr = ptr->left;
-			// 		else if(ptr->parent)
-			// 		{
-			// 			while (tmp->parent && tmp == tmp->parent->left)
-			// 				tmp = tmp->parent;
-			// 			if (tmp->parent)
-			// 				ptr = tmp->parent;
-			// 		}
-			// 	};
 		};
 //==================end iterator====================
 
@@ -317,10 +275,13 @@ namespace   ft {
 
 				while (it != end_it)
 				{
+					
 					f = it.getPtr();
+					it++;
+					if (f == nil_node)
+						break;
 					alloc.destroy(f);
 					alloc.deallocate(f, 1);
-					it++;
 				}
 				alloc.deallocate(nil_node, 1);
 			}
@@ -452,7 +413,14 @@ emplace_hint	Construct and insert element with hint (public member function)----
 
 			void erase (iterator first, iterator last) { while(first != last) erase(first++); }
 			
-			void swap (map& x)	{ node *tmp = root; root = x.root; x.root = tmp; };
+			void swap (map& x)	{ 
+				node *tmp = root; 
+				node *tmp_nil = nil_node;
+				root = x.root;
+				nil_node = x.nil_node;
+				x.root = tmp;
+				x.nil_node = tmp_nil;	
+			};
 
 			void clear() { deletedTree(); nil_node = new_node(); root = nil_node; };
 
@@ -687,10 +655,6 @@ get_allocator	Get allocator (public member function)----------------------------
 				}
 
 				/* setup new node */
-				// if ((x = malloc (sizeof(*x))) == 0) {
-				// 	printf ("insufficient memory (insertnode)\n");
-				// 	exit(1);
-				// }
 				x = new_node(data);
 				x->parent = parent;
 				x->left = nil_node;
@@ -781,15 +745,6 @@ get_allocator	Get allocator (public member function)----------------------------
 				*****************************/
 
 				if (!z || z == nil_node) return;
-
-				// if (z== root && z->left == nil_node && z->right == nil_node)
-				// {
-				// 	root = nil_node;
-				// 	alloc.destroy(z); 
-				// 	alloc.deallocate(z, 1);
-				// 	return;
-				// }
-				
 				if (z->left == nil_node || z->right == nil_node) {
 					/* y has a nil_node node as a child */
 					y = z;
@@ -806,33 +761,7 @@ get_allocator	Get allocator (public member function)----------------------------
 				else
 					x = y->right;
 
-				// if (x == nil_node && z == root)
-				// {
-				// 	std::cout << " z ->right  " << z->right->key() << std::endl;
-				// 	std::cout << " y ->parent  " << y->parent->key() << std::endl;
-				// 	if (y->parent->left == y) 
-				// 		y->parent->left = nil_node;
-				// 	else
-				// 		y->parent->right = nil_node;
-					
-				// 	root = y;
-				// 	root->parent = NULL;
-				// 	root->left = z->left;
-				// 	root->right = z->right;
-				// 	root->color = z->color;
-
-				// 	std::cout << " root ->right  " << root->right->key() << std::endl;
-				// 	std::cout << " root ->left  " << root->left->key() << std::endl;
-				// 	alloc.destroy(z); 
-				// 	alloc.deallocate(z, 1);
-				// 	// std::cout << " x -> " << x->key() << std::endl;
-				// 	std::cout << " y -> " << y->key() << std::endl;
-				// 	return;
-				// }
-				
-
 				/* remove y from the parent chain */
-				// if (x == nil_node)
 				x->parent = y->parent;
 				if (y->parent)
 					if (y == y->parent->left)
@@ -844,14 +773,14 @@ get_allocator	Get allocator (public member function)----------------------------
 
 				if (y != z) z = copy_data(z, y); // z->data = y->data;
 				
-				if (y->color == BLACK) 	deleteFixup (x);
+				if (y->color == BLACK && x != nil_node) 	deleteFixup (x);
 				rightXod();
 				if (y != nil_node) {alloc.destroy(y); alloc.deallocate(y, 1);}
 			}
 
 			node *copy_data(node * a, node * b)
 			{
-				if (a == nil_node) return a; 
+				if (a == nil_node || a == b) return a; 
 				node *c = new_node(b->data);
 				c->parent = a->parent;
 				c->left = a->left;
@@ -873,29 +802,6 @@ get_allocator	Get allocator (public member function)----------------------------
 			{
 				return (comp(lhs, rhs) == false && comp(rhs, lhs) == false);
 			}
-
-			// node* nextNode(node *ptr)
-			// 	{
-			// 		if (ptr->nil)
-			// 			return ptr;
-			// 		if (!ptr->right->nil)
-			// 		{
-			// 			ptr = ptr->right;
-			// 			while (!ptr->nil && !ptr->left->nil)
-			// 				ptr = ptr->left;
-			// 		}
-			// 		else
-			// 		{
-			// 			node *tmp = ptr;
-			// 			while (tmp->parent && tmp == tmp->parent->right)
-			// 				tmp = tmp->parent;
-			// 			if (tmp->parent)
-			// 				ptr = tmp->parent;
-			// 			else
-			// 				ptr = ptr->right;
-			// 		}
-			// 		return ptr;
-			// 	};
 
 //88888888888888888888888888888888888888888888888888888888888888888888888888888888888
 //END RBtree =================================================================================
