@@ -171,10 +171,10 @@ namespace   ft {
 				IteratorRevMap &	operator--	()		{ IteratorMap<IsRConst> it(ptr); it++; ptr= it.getPtr(); return (*this); }
 				IteratorRevMap		operator++	(int)	{ IteratorRevMap<IsRConst> x(*this); --*this; return (x); }
 				IteratorRevMap		operator--	(int)	{ IteratorRevMap<IsRConst> x(*this); ++*this; return (x); }
-
-				IteratorRevMap 	base	() 	{ return (*this); }
-				// value_type &	operator*	(void) const	{ return (it.base()->data); }
-				// value_type *	operator->	(void) const	{ return (&it.base()->data); }
+				
+				IteratorMap<IsRConst>	base	() 	{ IteratorMap<IsRConst> it(this->ptr); return (it++); }
+				value_type &	operator*	(void) const	{ return (ptr->data); }
+				value_type *	operator->	(void) const	{ return (&ptr->data); }
 				node_type  * 	getPtr		(void) const    { return ptr;         };
 		};
 //==================end iterator====================
