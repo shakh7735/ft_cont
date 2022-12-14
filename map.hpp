@@ -6,6 +6,7 @@
 # include <stdexcept>
 
 // # include "IteratorMap.hpp"
+# include "iterator_traits.hpp"
 # include "equal.hpp"
 # include "pair.hpp"
 
@@ -13,6 +14,26 @@
 
 
 namespace   ft {
+
+	template < class T >
+	struct iterator_traits< T* >
+	{
+		typedef ptrdiff_t								difference_type;
+		typedef T										value_type;
+		typedef T*										pointer;
+		typedef T&										reference;
+		typedef ft::bidirectional_iterator_tag			iterator_category;
+	};
+
+	template <class T>
+	struct iterator_traits<const T*>
+	{
+		typedef ptrdiff_t								difference_type;
+		typedef T										value_type;
+		typedef const T*								pointer;
+		typedef const T&								reference;
+		typedef ft::bidirectional_iterator_tag			iterator_category;
+	};
 
 	enum {BLACK = false, RED = true};
     template < class Key, class T, class Compare = ft::less<Key>,
@@ -141,7 +162,7 @@ namespace   ft {
 				typedef const value_type*								const_pointer;
 				typedef value_type&										reference;
 				typedef const value_type&								const_reference;
-				typedef std::bidirectional_iterator_tag					reverse_iterator_category;
+				typedef ft::bidirectional_iterator_tag					reverse_iterator_category;
 				typedef IteratorMap<IsRConst>					iterator;
 			
 			private:

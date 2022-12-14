@@ -3,6 +3,7 @@
 
 # include <cstddef>
 # include "equal.hpp"
+# include "iterator_traits.hpp"
 
 
 namespace ft
@@ -64,16 +65,6 @@ namespace ft
 
 
 // [ ITERATOR TRAITS ]
-	template <class iterator>
-	struct iterator_traits
-	{
-		typedef typename iterator::difference_type		difference_type;
-		typedef typename iterator::value_type			value_type;
-		typedef typename iterator::pointer				pointer;
-		typedef typename iterator::reference			reference;
-		typedef typename iterator::iterator_category	iterator_category;
-	};
-
 	template < class T >
 	struct iterator_traits< T* >
 	{
@@ -95,10 +86,10 @@ namespace ft
 	};
 
 	template<typename InputIterator>
-	typename iterator_traits<InputIterator>::difference_type distance(InputIterator first, InputIterator last,
+	typename ft::iterator_traits<InputIterator>::difference_type distance(InputIterator first, InputIterator last,
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)
 	{
-		typename iterator_traits<InputIterator>::difference_type n = 0;
+		typename ft::iterator_traits<InputIterator>::difference_type n = 0;
 
 		while (first != last)		{	++n; ++first;	};
 		return n;
