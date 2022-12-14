@@ -185,7 +185,7 @@
                 
                 arr = _alloc.allocate(_capacity);
                 for (size_type i = 0; i < _size; ++i)
-                    *(arr + i) = *(tmp + i);
+                    _alloc.construct( arr + i , *(tmp + i));
                 for(T* it = tmp; it != tmp + _size; ++it)
                         _alloc.destroy(it);
                 if (last_cap > 0)
