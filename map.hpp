@@ -44,11 +44,11 @@ namespace   ft {
 				typedef					ft::pair<const Key, T>										pair_type;
 				typedef typename		ft::conditional<IsConst, const pair_type, pair_type>::type	value_type;
 				typedef typename		ft::conditional<IsConst, const node, node>::type			node_type;
-				typedef value_type*										pointer;
-				typedef const value_type*								const_pointer;
-				typedef value_type&										reference;
-				typedef const value_type&								const_reference;
-				typedef std::bidirectional_iterator_tag			iterator_category;
+				typedef value_type*																	pointer;
+				typedef const value_type*															const_pointer;
+				typedef value_type&																	reference;
+				typedef const value_type&															const_reference;
+				typedef ft::bidirectional_iterator_tag												iterator_category;
 				typedef					std::ptrdiff_t												difference_type;
 				typedef					std::size_t													size_type;
 			

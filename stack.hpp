@@ -11,6 +11,10 @@ namespace   ft {
             typedef T							value_type;
 			typedef Container					container_type;
 			typedef size_t						size_type;
+            typedef value_type*																	pointer;
+			typedef const value_type*															const_pointer;
+			typedef value_type&																	reference;
+			typedef const value_type&															const_reference;
         
         protected:
             container_type                      content;

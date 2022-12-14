@@ -17,6 +17,11 @@ namespace ft
 		typedef integral_constant<T, v>	type;
 	};
 
+	struct bidirectional_iterator_tag {};
+
+    struct random_access_iterator_tag {};
+
+	
 	typedef integral_constant<bool, true>	true_type;
 	typedef integral_constant<bool, false>	false_type;
 
