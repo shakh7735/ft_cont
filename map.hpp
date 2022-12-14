@@ -111,9 +111,11 @@ namespace   ft {
 				void prevNode()
 				{
 					node_type *				tmp = ptr;
-
 					if (!ptr->nil && !ptr->left->nil)
+					{	
 						ptr = ptr->left;
+						while (!ptr->right->nil) ptr = ptr->right;
+					}
 					else if(ptr->parent)
 					{
 						if (ptr->nil)
@@ -122,15 +124,13 @@ namespace   ft {
 						{
 							while (tmp->parent && tmp == tmp->parent->left)
 								tmp = tmp->parent;
-								// std::cout << " ptr :" << ptr->data.first << "\n";
 							if (tmp->parent)
 								ptr = tmp->parent;
 						}
 					}
 				};
 		};
-		
-//=============== Reverse Iterator ============================================
+
 		template <bool IsRConst>
 		class IteratorRevMap  { 
 			public:
@@ -168,15 +168,15 @@ namespace   ft {
 				bool	operator==	(const IteratorRevMap & x) const	{ return (getPtr() == x.getPtr()); }
 				bool	operator!=	(const IteratorRevMap & x) const	{ return (getPtr() != x.getPtr()); }
 				
-				IteratorRevMap &	operator++	()		{ nextRev(); return (*this); }
-				IteratorRevMap &	operator--	()		{ prevRev(); return (*this); }
-				IteratorRevMap		operator++	(int)	{ IteratorRevMap<IsRConst> x(*this); nextRev(); return (x); }
+				IteratorRevMap &	operator++	()		{ nextRev(); return (*this); } // ++it
+				IteratorRevMap &	operator--	()		{ prevRev(); return (*this); } // --it;
+				IteratorRevMap		operator++	(int)	{ IteratorRevMap<IsRConst> x(*this); nextRev(); return (x); } // it++;
 				IteratorRevMap		operator--	(int)	{ IteratorRevMap<IsRConst> x(*this); prevRev(); return (x); }
 				
 				IteratorMap<IsRConst>	base	() 	{ return (convert_rev_to_base(b_it)); }
 				value_type &	operator*	(void) const	{ return (getPtr()->data); }
 				value_type *	operator->	(void) const	{ return (&getPtr()->data); }
-				node_type  * 	getPtr		(void) const    { return b_it.getPtr();         };
+				node_type  * 	getPtr		(void) const    { return b_it.getPtr();     };
 				iterator		getIt		(void) const	{ return (b_it); }
 
 			private:
@@ -198,10 +198,9 @@ namespace   ft {
 
 				IteratorMap<IsRConst> convert_rev_to_base(IteratorMap<IsRConst> it)
 				{
-					IteratorMap<false> tmp(it.getPtr());
-					IteratorMap<false> tmp2 = tmp;
-					if (tmp.getPtr()->nil)
-						while (tmp2 != --tmp) tmp2 = tmp;
+					IteratorMap<IsRConst> tmp(it.getPtr());
+					if (getPtr()->nil)
+						while (it != --tmp) it = tmp;
 					else
 					{
 						++tmp;
@@ -214,14 +213,13 @@ namespace   ft {
 
 				void nextRev()
 				{
-					node *ptr = getPtr();
+					IteratorMap<IsRConst> tmp(getPtr());
 					--b_it;
-					if (ptr == getPtr())
-						ptr = ptr->left;
-					else
-						ptr = getPtr();
-					IteratorMap<IsRConst> it(ptr);
-					b_it = it;
+					if (tmp == b_it)
+					{
+						IteratorMap<IsRConst> ret(getPtr()->left);
+						b_it = ret;
+					}
 				}
 
 				void prevRev()
@@ -392,11 +390,11 @@ crend	Return const_reverse_iterator to reverse end (public member function)-----
 		const_iterator end() const 		{	return (const_iterator(nil_node));	};
 		const_iterator cend() const 		{	return (const_iterator(nil_node));	};
 
-		reverse_iterator rbegin ()		{	return (reverse_iterator((nil_node)));	};
-		const_reverse_iterator rbegin () const	{	return (const_reverse_iterator((nil_node)));};
+		reverse_iterator rbegin ()		{	return (reverse_iterator(end()));	};
+		const_reverse_iterator rbegin () const	{	return (const_reverse_iterator(end()));};
 
-		reverse_iterator rend ()		{	return (reverse_iterator(leftXod()));	};
-		const_reverse_iterator rend () const	{	return (const_reverse_iterator(leftXod()));	};
+		reverse_iterator rend ()		{	return (reverse_iterator(begin()));	};
+		const_reverse_iterator rend () const	{	return (const_reverse_iterator(begin()));	};
 
 /*Capacity:------------------------------------------------------------------------
 empty	Test whether container is empty (public member function)
