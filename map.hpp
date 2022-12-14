@@ -129,9 +129,10 @@ namespace   ft {
 					}
 				};
 		};
-
+		
+//=============== Reverse Iterator ============================================
 		template <bool IsRConst>
-		class IteratorRevMap : public IteratorMap< IsRConst>  { 
+		class IteratorRevMap  { 
 			public:
 				typedef					ft::pair<const Key, T>										pair_type;
 				typedef typename		ft::conditional<IsRConst, const pair_type, pair_type>::type	value_type;
@@ -144,38 +145,96 @@ namespace   ft {
 				typedef IteratorMap<IsRConst>					iterator;
 			
 			private:
-				node_type *ptr;
+				iterator b_it;
 
 			public:
 			////////////////---CONSTRUCTORS & DESTRUCTOR---////////////////////////////
 				IteratorRevMap		()	{}
 
-				IteratorRevMap		(node_type *ptr) :ptr(ptr)	{}
+				// IteratorRevMap		(node_type *ptr) :ptr(ptr)	{}
 
 				template <bool C>
-				IteratorRevMap		(const IteratorMap<C> & it)	: ptr(it.getPtr())		{}
+				IteratorRevMap		(const IteratorMap<C> & it)	: b_it(convert_base_to_rev(it))	{}
 				
 				template <bool C>
-				IteratorRevMap	(const IteratorRevMap<C> & other, typename ft::enable_if<!C>::type* = 0) : ptr(other.getPtr())	{}
+				IteratorRevMap	(const IteratorRevMap<C> & other, typename ft::enable_if<!C>::type* = 0) : b_it(other.getIt())	{}
 
 				IteratorRevMap &operator=	(const IteratorRevMap & other)	
-				{ ptr = other.ptr; return (*this); }
+				{ b_it = other.b_it; return (*this); }
 
 				~IteratorRevMap	(void)									{}
 			///////////////////////////////////////////////////////////////////////////
 
-				// bool	operator==	(const IteratorRevMap & x) const	{ return (ptr == x.ptr); }
-				// bool	operator!=	(const IteratorRevMap & x) const	{ return (ptr != x.ptr); }
+				bool	operator==	(const IteratorRevMap & x) const	{ return (getPtr() == x.getPtr()); }
+				bool	operator!=	(const IteratorRevMap & x) const	{ return (getPtr() != x.getPtr()); }
 				
-				IteratorRevMap &	operator++	()		{ IteratorMap<IsRConst> it(ptr); it--; ptr= it.getPtr(); return (*this); }
-				IteratorRevMap &	operator--	()		{ IteratorMap<IsRConst> it(ptr); it++; ptr= it.getPtr(); return (*this); }
-				IteratorRevMap		operator++	(int)	{ IteratorRevMap<IsRConst> x(*this); --*this; return (x); }
-				IteratorRevMap		operator--	(int)	{ IteratorRevMap<IsRConst> x(*this); ++*this; return (x); }
+				IteratorRevMap &	operator++	()		{ nextRev(); return (*this); }
+				IteratorRevMap &	operator--	()		{ prevRev(); return (*this); }
+				IteratorRevMap		operator++	(int)	{ IteratorRevMap<IsRConst> x(*this); nextRev(); return (x); }
+				IteratorRevMap		operator--	(int)	{ IteratorRevMap<IsRConst> x(*this); prevRev(); return (x); }
 				
-				IteratorMap<IsRConst>	base	() 	{ IteratorMap<IsRConst> it(this->ptr); return (it++); }
-				value_type &	operator*	(void) const	{ return (ptr->data); }
-				value_type *	operator->	(void) const	{ return (&ptr->data); }
-				node_type  * 	getPtr		(void) const    { return ptr;         };
+				IteratorMap<IsRConst>	base	() 	{ return (convert_rev_to_base(b_it)); }
+				value_type &	operator*	(void) const	{ return (getPtr()->data); }
+				value_type *	operator->	(void) const	{ return (&getPtr()->data); }
+				node_type  * 	getPtr		(void) const    { return b_it.getPtr();         };
+				iterator		getIt		(void) const	{ return (b_it); }
+
+			private:
+				IteratorMap<IsRConst> convert_base_to_rev(IteratorMap<IsRConst> it)
+				{
+					IteratorMap<IsRConst> tmp(it.getPtr());
+					if ( it == --tmp)
+					{
+						IteratorMap<IsRConst> ret(tmp.getPtr()->left);
+						tmp = ret;
+					}	
+					else
+					{
+						IteratorMap<IsRConst> ret(tmp.getPtr());
+						tmp = ret;
+					}
+					return tmp;
+				}
+
+				IteratorMap<IsRConst> convert_rev_to_base(IteratorMap<IsRConst> it)
+				{
+					IteratorMap<false> tmp(it.getPtr());
+					IteratorMap<false> tmp2 = tmp;
+					if (tmp.getPtr()->nil)
+						while (tmp2 != --tmp) tmp2 = tmp;
+					else
+					{
+						++tmp;
+						if (tmp.getPtr()->nil)
+							--tmp;
+					}
+					IteratorMap<IsRConst> ret(tmp.getPtr());
+					return ret;
+				}
+
+				void nextRev()
+				{
+					node *ptr = getPtr();
+					--b_it;
+					if (ptr == getPtr())
+						ptr = ptr->left;
+					else
+						ptr = getPtr();
+					IteratorMap<IsRConst> it(ptr);
+					b_it = it;
+				}
+
+				void prevRev()
+				{
+					IteratorMap<IsRConst> tmp = b_it;
+					if (getPtr()->nil)
+						while (tmp != --b_it) tmp = b_it;
+					else
+					{	++b_it;
+						if (getPtr()->nil)
+							--b_it;}
+				}
+
 		};
 //==================end iterator====================
 
