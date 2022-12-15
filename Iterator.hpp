@@ -65,35 +65,35 @@ namespace ft
 
 
 // [ ITERATOR TRAITS ]
-	template < class T >
-	struct iterator_traits< T* >
-	{
-		typedef ptrdiff_t								difference_type;
-		typedef T										value_type;
-		typedef T*										pointer;
-		typedef T&										reference;
-		typedef ft::random_access_iterator_tag			iterator_category;
-	};
+	// template < class T >
+	// struct iterator_traits< T* >
+	// {
+	// 	typedef ptrdiff_t								difference_type;
+	// 	typedef T										value_type;
+	// 	typedef T*										pointer;
+	// 	typedef T&										reference;
+	// 	typedef ft::random_access_iterator_tag			iterator_category;
+	// };
 
-	template <class T>
-	struct iterator_traits<const T*>
-	{
-		typedef ptrdiff_t								difference_type;
-		typedef T										value_type;
-		typedef const T*								pointer;
-		typedef const T&								reference;
-		typedef ft::random_access_iterator_tag			iterator_category;
-	};
+	// template <class T>
+	// struct iterator_traits<const T*>
+	// {
+	// 	typedef ptrdiff_t								difference_type;
+	// 	typedef T										value_type;
+	// 	typedef const T*								pointer;
+	// 	typedef const T&								reference;
+	// 	typedef ft::random_access_iterator_tag			iterator_category;
+	// };
 
-	template<typename InputIterator>
-	typename ft::iterator_traits<InputIterator>::difference_type distance(InputIterator first, InputIterator last,
-		typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)
-	{
-		typename ft::iterator_traits<InputIterator>::difference_type n = 0;
+	// template<typename InputIterator>
+	// typename ft::iterator_traits<InputIterator>::difference_type distance(InputIterator first, InputIterator last,
+	// 	typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)
+	// {
+	// 	typename ft::iterator_traits<InputIterator>::difference_type n = 0;
 
-		while (first != last)		{	++n; ++first;	};
-		return n;
-	}
+	// 	while (first != last)		{	++n; ++first;	};
+	// 	return n;
+	// }
 /////////////////////////////////////////////////////////////////////////
 
 	// [	NON MEMBER FUNCTIONS	]
@@ -110,12 +110,13 @@ namespace ft
 	class reverse_iterator
 	{
 		public:
+			
 			typedef iterator												iterator_type;
-			typedef typename iterator_traits<iterator>::iterator_category	iterator_category;
 			typedef typename iterator_traits<iterator>::value_type			value_type;
 			typedef typename iterator_traits<iterator>::difference_type		difference_type;
 			typedef typename iterator_traits<iterator>::pointer				pointer;
 			typedef typename iterator_traits<iterator>::reference			reference;
+			typedef ft::random_access_iterator_tag							iterator_category;
 
 		private:
 			iterator _it;
