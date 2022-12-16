@@ -38,21 +38,17 @@
             size_type _size;
            
             
-            size_type increasingCapacity(size_type size){ return (size * 3 / 2 + 1); }
+            size_type increasingCapacity(size_type size){ return ((size == 0? 1 : size * 2)); }
            
             void deallocateArray()
             {
-                // if (_capacity == 0)
-                //     return ;
-                for(T* it = arr; it != arr + _size; ++it)
-                        _alloc.destroy(it);
+                if (_capacity == 0)
+                    return ;
+                while (_size)
+                        pop_back();
                 _alloc.deallocate(arr, _capacity);
-                _size = 0;
                 _capacity = 0;
             }
-            
-            // template <class InputIterator>
-            // bool equalIteratorVal(InputIterator it) { return typeid(T) == typeid(*it); }
 
         public:
 // CONSTRUCTORS-------------------------------------------------------------------
@@ -61,15 +57,13 @@
                         _alloc(alloc), _capacity(0), arr(NULL),	_size(0) {};
 
 			explicit	vector( size_type n, const value_type& val = value_type(),
-							const allocator_type& alloc = allocator_type() )    :
-                    	_alloc(alloc), _capacity(0), arr(NULL), _size(0)		
+							const allocator_type& alloc = allocator_type() )    : _alloc(alloc), _capacity(0), arr(NULL), _size(0)		
             {	
+                if (n <= 0)
+                    return;
                 arr = _alloc.allocate(n);
-                for (size_type k = 0; k < n; k++) {
-                _alloc.construct(&arr[k], val);
-                }
-                _size = n;
                 _capacity = n;
+                while (_size < n) push_back(val);
             };
 
 			template <class InputIterator>
@@ -89,19 +83,19 @@
 				return *this;
 			}
 // DESTRUCTOR-------------------------------------------------------------------
-            ~vector()   { clear(); _alloc.deallocate(arr, _capacity); } //   std::cout << "Delete vector.\n"; }
+            ~vector()   { deallocateArray(); } //   std::cout << "Delete vector.\n"; }
 
 // Element access:--------------------------------------------------------------
         T &operator[](size_type index){
             if (index > _size)
                 throw std::out_of_range("out out_of_range");
-            return (*(arr + index));
+            return (arr[index]);
         }
 
         const T &operator[] (size_type index) const {
             if (index > _size)
                 throw std::out_of_range("out out_of_range");
-            return (*(arr + index));
+            return (arr[index]);
         }
 
         T &at (size_type n)
@@ -154,16 +148,7 @@
         
         size_type max_size() const { return _alloc.max_size(); }
         
-        void resize (size_type n)
-        {
-            reserve(n);
-            while (n < _size)	
-                pop_back();
-            _size = n;
-
-        }
-        
-        void resize (size_type n, T val)
+        void resize (size_type n, const value_type& val = value_type())
         {
             reserve(n);
             while (n < _size)	
@@ -181,15 +166,17 @@
                     return;
                 size_type last_cap = _capacity;
                 _capacity = new_cap;
-                T* tmp = arr;
-                
-                arr = _alloc.allocate(_capacity);
-                for (size_type i = 0; i < _size; ++i)
-                    _alloc.construct( arr + i , *(tmp + i));
-                for(T* it = tmp; it != tmp + _size; ++it)
-                        _alloc.destroy(it);
+                T* tmp = _alloc.allocate(_capacity);
+                size_type s = 0;
+                while (s < _size){
+                    _alloc.construct( tmp + s, arr[s]);
+                    s++;
+                }
+                size_type i = 0;
+                while (i < _size) _alloc.destroy(arr + i++);   
                 if (last_cap > 0)
-                    _alloc.deallocate(tmp, last_cap);
+                    _alloc.deallocate(arr, last_cap);
+                arr = tmp;
             }
             
         void shrink_to_fit() { _capacity = _size; }
@@ -208,7 +195,7 @@
 	    	    push_back(*(first++));
         }
         
-        void assign (size_type n, const T& val)
+        void assign (size_type n, const value_type& val)
         {
             clear();
             reserve(n);
@@ -216,14 +203,16 @@
 	    	    push_back(val);
         }
         
-        void push_back(value_type elem) {
-            if (_size == _capacity)
+        void push_back(const value_type& elem) {
+            if (_size >= _capacity)
                 reserve(increasingCapacity(_size));
-            _alloc.construct(arr + _size++, elem);
+            _alloc.construct(arr + _size, elem);
+            _size++;
         }
         
         void pop_back(void) {
-            _alloc.destroy(&(arr [ --_size]));
+            if (_size > 0)
+                _alloc.destroy(&(arr [ --_size]));
         }
         
         iterator insert (iterator position, const T& val) { 
@@ -282,22 +271,26 @@
                 new_cap = new_size;
             reserve(new_cap);
             
+            
             size_type i = 0;
             while ( i++ < _size)
             {
                 if (pos++ == position)
                     break;
             }
-            i--;
+            if (i > 0)
+                i--;
             size_type j = new_size - 1;
             while ( j >= dist + i)
             {
-                _alloc.construct(&arr[j--], (arr [--_size]));
-                _alloc.destroy(&arr[_size]);
+                --_size;
+                _alloc.construct(&arr[j--], (arr [_size]));
+                 _alloc.destroy(&arr[_size]);
                 
             }
-            for (InputIterator it = first; it != last; it++) {
-                arr[i++] = *it;
+            while (first != last) { 
+                _alloc.construct(&arr[_size++], (*first));
+                first++;
             }
             _size = new_size;
         }
@@ -334,15 +327,7 @@
 				ft::swap(_size, other._size);
         }
         
-        void clear() {
-            if (empty())
-                return;
-            for(value_type* it = arr; it != arr + _size; ++it)
-                        _alloc.destroy(it);
-                _size = 0;
-        }
-
-        
+        void clear() {   while (size()) pop_back();  }
         
  // ============================================================================
  
