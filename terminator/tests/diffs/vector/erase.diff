@@ -1,0 +1,7 @@
+--- logs/vector/erase__ft.log	2022-12-17 00:52:24.736775700 +0400
++++ logs/vector/erase__std.log	2022-12-17 00:52:30.259168600 +0400
+@@ -1,4 +1,3 @@
+-Called destroy on uninitialized memory: 0x602000000010
+ ========================================
+ No leak detected
+ ========================================

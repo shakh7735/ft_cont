@@ -7,6 +7,7 @@
 # include <memory>
 # include <algorithm>
 # include <stdexcept>
+# include <iostream>
 
     namespace   ft {
     
@@ -211,8 +212,10 @@
         }
         
         void pop_back(void) {
-            if (_size > 0)
-                _alloc.destroy(&(arr [ --_size]));
+            if (_size > 0) {
+                _alloc.destroy(&(arr [_size - 1]));
+                _size--;
+            }
         }
         
         iterator insert (iterator position, const T& val) { 
@@ -266,18 +269,24 @@
             size_type new_cap = _capacity;
             size_type dist = ft::distance(first, last);
             size_type new_size = _size + dist;
+            // int ind_first = -1;
+            // int ind_last = -1;
             
             if (new_size > _capacity)
                 new_cap = new_size;
+            
             reserve(new_cap);
             
-            
+            // value_type * tmp = _alloc.allocate(new_cap);
+
             size_type i = 0;
-            while ( i++ < _size)
+            while ( i < _size)
             {
+                i++;
                 if (pos++ == position)
                     break;
             }
+
             if (i > 0)
                 i--;
             size_type j = new_size - 1;
@@ -300,22 +309,33 @@
         iterator erase (iterator first, iterator last)
         {
             int ind_first = -1;
-            int ind_last = -1;
+            // int ind_last = -1;
             size_type dist = ft::distance(first, last);
-            iterator it = begin();
             
-            for (size_type i = 0; i < _size; i++) {
-                if (it == first)
-                    ind_first = (int)i;
-                if ( it == last)
-                    ind_last = (int)i;
-                if ( ind_first != -1 && i + dist < _size ) 
-                    *it = it[dist];
-                if ( ind_first != -1 && ind_last != -1)
-                    _alloc.destroy(&(*it));
+            iterator it = begin();
+            if (dist == 0)
+                return it;
 
+            for (size_type i = 0; i < _size; i++) {
+                if (it == first) {
+                    ind_first = (int)i;
+                    // std::cout << " ind_first = " << i << '\n';
+                    // std::cout << " size = " << _size << '\n';
+                    // std::cout << " distance = " << dist << '\n';
+                }
+                // if ( it == last)
+                //     ind_last = (int)i;
+                if ( ind_first != -1 ) {
+                    // std::cout << " ind_first = " << ind_first << '\n';
+                    _alloc.destroy(&(*it));
+                    if (i + dist < _size) {
+                        _alloc.construct(&(*it), arr[i + dist]);
+                        // _alloc.destroy(&(arr[i + dist]));
+                    }
+                }
                 it++;
             }
+            // std::cout << " size = " << _size << '\n';
             _size -= dist;
             return first ;
         }
