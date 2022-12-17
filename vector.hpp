@@ -76,14 +76,18 @@
                 _alloc(alloc), _capacity(0), arr(NULL), _size(0) 	
             {	insert(begin(), first, last);	};
 
-			vector( const vector& x )	:	
-                _alloc(x._alloc), _capacity(x._capacity), 
-                arr(_alloc.allocate(x._capacity)), _size(x._size)								
-            {		assign(x.begin(), x.end());		};
+			vector( const vector& x )								
+            {  *this = x;   };
 
 			vector&					operator = (const vector& x)
 			{
-				if (this != &x) assign(x.begin(), x.end());
+                if (*this == x)
+                    return *this;
+                deallocateArray();
+                _alloc = x.get_allocator();
+                _capacity = x.capacity();
+                arr = _alloc.allocate(_capacity);
+                assign(x.begin(), x.end());
 				return *this;
 			}
 // DESTRUCTOR-------------------------------------------------------------------
@@ -237,31 +241,31 @@
         {
             iterator pos = begin();
             size_type new_cap = _capacity;
-            size_type dist = n;
-            size_type new_size = _size + dist;
+            size_type new_size = _size + n;
             
             if (new_size > _capacity)
                 new_cap = new_size;
-            reserve(new_cap);
-            
+            if (new_cap == 0 || n == 0)
+                return;
+            if (new_cap > max_size())
+                throw std::length_error("_Maximum_size_out");
+            value_type *tmp = _alloc.allocate(new_cap);
             size_type i = 0;
-            while ( i++ < _size)
-            {
-                if (pos++ == position)
-                    break;
+            size_type a = 0;
+            while(i < new_size){
+                if (pos == position) {
+                    while (n > 0) {
+                        _alloc.construct(&tmp[i++], val);
+                        n--;
+                    }
+                }
+                else
+                    _alloc.construct(&tmp[i++], arr[a++]);
+                ++pos;
             }
-            i--;
-            size_type j = new_size - 1;
-            while ( j >= dist + i)
-            {
-                _alloc.construct(&arr[j--], (arr [--_size]));
-                _alloc.destroy(&arr[_size]);
-                
-            }
-            for (size_type k = 0; k < dist; k++) {
-                _alloc.destroy(&arr[i]);
-                _alloc.construct(&arr[i++], val);
-            }
+            deallocateArray();
+            arr = tmp;
+            _capacity = new_cap;
             _size = new_size;
         }
         
@@ -274,38 +278,34 @@
             size_type new_cap = _capacity;
             size_type dist = ft::distance(first, last);
             size_type new_size = _size + dist;
-            // int ind_first = -1;
-            // int ind_last = -1;
             
             if (new_size > _capacity)
                 new_cap = new_size;
             
-            reserve(new_cap);
+            if (new_cap == 0 || dist == 0 )
+                return ;
+            // reserve(new_cap);
             
             // value_type * tmp = _alloc.allocate(new_cap);
             
+            if (new_cap > max_size())
+                throw std::length_error("_Maximum_size_out");
+            value_type *tmp = _alloc.allocate(new_cap);
             size_type i = 0;
-            while ( i < _size)
-            {
-                i++;
-                if (pos++ == position)
-                    break;
+            size_type a = 0;
+            while(i < new_size){
+                if (pos == position) {
+                    while (first != last) {
+                        _alloc.construct(&tmp[i++], (*first++));
+                    }
+                }
+                else
+                    _alloc.construct(&tmp[i++], arr[a++]);
+                ++pos;
             }
-
-            if (i > 0)
-                i--;
-            size_type j = new_size - 1;
-            while ( j >= dist + i)
-            {
-                --_size;
-                _alloc.construct(&arr[j--], (arr [_size]));
-                 _alloc.destroy(&arr[_size]);
-                
-            }
-            while (first != last) { 
-                _alloc.construct(&arr[_size++], (*first));
-                first++;
-            }
+            deallocateArray();
+            arr = tmp;
+            _capacity = new_cap;
             _size = new_size;
         }
 
@@ -324,23 +324,15 @@
             for (size_type i = 0; i < _size; i++) {
                 if (it == first) {
                     ind_first = (int)i;
-                    // std::cout << " ind_first = " << i << '\n';
-                    // std::cout << " size = " << _size << '\n';
-                    // std::cout << " distance = " << dist << '\n';
                 }
-                // if ( it == last)
-                //     ind_last = (int)i;
                 if ( ind_first != -1 ) {
-                    // std::cout << " ind_first = " << ind_first << '\n';
                     _alloc.destroy(&(*it));
                     if (i + dist < _size) {
                         _alloc.construct(&(*it), arr[i + dist]);
-                        // _alloc.destroy(&(arr[i + dist]));
                     }
                 }
                 it++;
             }
-            // std::cout << " size = " << _size << '\n';
             _size -= dist;
             return first ;
         }

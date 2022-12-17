@@ -53,15 +53,15 @@ void vec_test_ctor_range()
         CHECK_AND_PRINT_ALL(v);
     }
 
-    {
-        // This test checks if vector works with iterators tagged as std::input_iterator_tag
-        std::istringstream str("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        std::istreambuf_iterator<char> it(str), end;
+    // {
+    //     // This test checks if vector works with iterators tagged as std::input_iterator_tag
+    //     std::istringstream str("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    //     std::istreambuf_iterator<char> it(str), end;
 
-        charvector v(it, end);
+    //     charvector v(it, end);
 
-        CHECK_AND_PRINT_ALL(v);
-    }
+    //     CHECK_AND_PRINT_ALL(v);
+    // }
 }
 
 MAIN(vec_test_ctor_range)

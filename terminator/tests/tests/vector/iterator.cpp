@@ -152,19 +152,19 @@ void vec_test_iterator()
         PRINT_LINE("Cit + 10:", cit[10]);
     }
 
-    {
-        longvector v(b_long, b_long + b_size);
+    // {
+    //     longvector v(b_long, b_long + b_size);
 
-        long (*fn)(const long&) = &times2;
+    //     long (*fn)(const long&) = &times2;
 
-        std::transform(v.begin(), v.end() - 10, v.begin(), fn);
+    //     std::transform(v.begin(), v.end() - 10, v.begin(), fn);
 
-        CHECK_AND_PRINT_ALL(v);
+    //     CHECK_AND_PRINT_ALL(v);
 
-        std::reverse(v.begin(), v.end());
+    //     std::reverse(v.begin(), v.end());
 
-        CHECK_AND_PRINT_ALL(v);
-    }
+    //     CHECK_AND_PRINT_ALL(v);
+    // }
 
     {
         const longvector v(b_long, b_long + b_size);

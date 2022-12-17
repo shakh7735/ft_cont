@@ -12,7 +12,7 @@ DIFFS="diffs"
 
 CXX="clang++"
 CXXFLAGS="-Wall -Werror -Wextra -std=c++98 -I$FT_CONTAINERS -I."
-CXXFLAGS+=" -fsanitize=address -g3"
+# CXXFLAGS+=" -fsanitize=address -g3"
 
 TEST_DIR="tests"
 

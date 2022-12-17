@@ -5,7 +5,7 @@
 
 namespace   ft {
 
-    template <class T, class Container = vector<T> >
+    template <class T, class Container = ft::vector<T> >
     class stack{
         public:
             typedef T							value_type;
@@ -22,6 +22,14 @@ namespace   ft {
         public:
 // [ MEMBER FUNCTIONS ]
             explicit stack (const container_type& ctnr = container_type()) : content(ctnr) {};
+            stack(stack const &other) { *this = other; }
+	        virtual ~stack() {}
+
+            stack &operator=(stack const &other) { 
+                if (this != &other)
+                    this->content = other.content; 
+                return (*this); 
+            }
 
             bool empty() const {    return content.empty();    };
             size_type size() const {    return content.size();  };
@@ -29,7 +37,7 @@ namespace   ft {
             const value_type& top() const { return content.back();  };
             void push (const value_type& val)   {   content.push_back(val);  };
             void pop() {   content.pop_back();   };
-            // void swap (stack& x) noexcept { content.swap(x.content) };
+            void swap (stack& x)  { content.swap(x.content); };
     
 //  Relational operators for stack            
             friend bool operator== (const stack<T,Container>& lhs, const stack<T,Container>& rhs)

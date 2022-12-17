@@ -8,12 +8,11 @@
 namespace   ft {
 
 
-    // struct input_iterator_tag { };
-	// struct output_iterator_tag { };
-	// struct forward_iterator_tag : public input_iterator_tag { };
-	// struct iterator_stract{};
-	struct bidirectional_iterator_tag { } ;
-	// typedef iterator_stract random_access_iterator_tag;
+    struct input_iterator_tag { };
+	struct output_iterator_tag { };
+	struct forward_iterator_tag : public input_iterator_tag { };
+	struct bidirectional_iterator_tag : struct forward_iterator_tag;
+	// typedef random_access_iterator_tag : public bidirectional_iterator_tag {};
 
 	// [ ITERATOR TRAITS ]
 	// template <class iterator>
