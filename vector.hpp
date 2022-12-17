@@ -45,9 +45,10 @@
             {
                 if (_capacity == 0)
                     return ;
-                while (_size)
+                while (_size > 0)
                         pop_back();
-                _alloc.deallocate(arr, _capacity);
+                if (_capacity > 0)
+                    _alloc.deallocate(arr, _capacity);
                 _capacity = 0;
             }
 
@@ -60,16 +61,18 @@
 			explicit	vector( size_type n, const value_type& val = value_type(),
 							const allocator_type& alloc = allocator_type() )    : _alloc(alloc), _capacity(0), arr(NULL), _size(0)		
             {	
-                if (n <= 0)
+                
+                if (n == 0)
                     return;
-                arr = _alloc.allocate(n);
-                _capacity = n;
-                while (_size < n) push_back(val);
+                reserve(n);
+                while (_size < n) 
+                    push_back(val);
             };
 
 			template <class InputIterator>
 			vector( InputIterator first, InputIterator last, 
-                const allocator_type& alloc = allocator_type())	:  
+                const allocator_type& alloc = allocator_type(), 
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)	:  
                 _alloc(alloc), _capacity(0), arr(NULL), _size(0) 	
             {	insert(begin(), first, last);	};
 
@@ -165,6 +168,8 @@
         void reserve( size_type new_cap ) {
                 if (new_cap <= _capacity)
                     return;
+                if (new_cap > max_size())
+                    throw std::length_error("_Maximum_size_out");
                 size_type last_cap = _capacity;
                 _capacity = new_cap;
                 T* tmp = _alloc.allocate(_capacity);
@@ -278,7 +283,7 @@
             reserve(new_cap);
             
             // value_type * tmp = _alloc.allocate(new_cap);
-
+            
             size_type i = 0;
             while ( i < _size)
             {
