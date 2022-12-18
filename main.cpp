@@ -1,6 +1,7 @@
 #include <iostream>
 # include <sstream>
 #include <vector>
+#include <map>
 #include "map.hpp"
 #include "vector.hpp"
 
@@ -42,6 +43,7 @@
 	}
 
 
+
 template <typename T>
 std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
 {
@@ -67,9 +69,30 @@ void	printSize(T_MAP const &mp, bool print_content = 1)
 	std::cout << "###############################################" << std::endl;
 }
 
+const std::string       map_example12(double &_time)
+        {
+                std::ostringstream      ss;
+
+                NS::map<char, int>      A;
+                A.insert(NS::make_pair('d', 0));
+                A.insert(NS::make_pair('b', -2));
+                A.insert(NS::make_pair('f', 2));
+                A.insert(NS::make_pair('c', -1));
+                A.insert(NS::make_pair('e', 1));
+                A.insert(NS::make_pair('a', -3));
+                A.insert(NS::make_pair('j', 3));
+                ss << " " << A.find('e')->first;
+                NS::map<char, int>::const_iterator      it1 = A.find('a');
+                NS::map<char, int>::const_iterator      it2 = A.find('o');
+                while (it1 != it2)
+                        ss << " " << (it1++)->first;
+                _time = 0;
+                return (ss.str());
+        }
 
 int main()
 {
-    std::cout << vec_example12();
+        double _time;
+    std::cout << map_example12(_time);
     return (0);
 }

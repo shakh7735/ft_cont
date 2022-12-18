@@ -22,23 +22,23 @@ namespace	NS_TEST
 		std::ostringstream	ss;
 	
 		NS::vector<int> vec(5, int(42));
-		// ss << " " << vec.capacity();
+		ss << " " << vec.capacity();
 		ss << " " << vec.size();
 		for (size_t i = 0; i < vec.size(); ++i)
 			ss << ' ' << vec[i];
 		vec.resize(7);
-		// ss << " " << vec.capacity();
+		ss << " " << vec.capacity();
 		ss << " " << vec.size();
 		for (size_t i = 0; i < vec.size(); ++i)
 			ss << ' ' << vec[i];
 		vec.resize(11, 21);
 		vec.resize(11);
-		// ss << " " << vec.capacity();
+		ss << " " << vec.capacity();
 		ss << " " << vec.size();
 		for (size_t i = 0; i < vec.size(); ++i)
 			ss << ' ' << vec[i];
 		vec.resize(6);
-		// ss << " " << vec.capacity();
+		ss << " " << vec.capacity();
 		ss << " " << vec.size();
 		for (size_t i = 0; i < vec.size(); ++i)
 			ss << ' ' << vec[i];

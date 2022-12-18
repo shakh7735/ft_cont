@@ -31,7 +31,7 @@ namespace	NS_TEST
 		vec.insert(vec.end(), 3, 2);
 		for (size_t i = 0; i < vec.size(); ++i)
 			ss << ' ' << vec[i];
-		// ss << " " << vec.capacity();
+		ss << " " << vec.capacity();
 		ss << " " << vec.size();
 		vec.reserve(30);
 		it = vec.begin() + 2;
@@ -41,7 +41,7 @@ namespace	NS_TEST
 		vec.insert(vec.begin(), 1, -1);
 		for (size_t i = 0; i < vec.size(); ++i)
 			ss << ' ' << vec[i];
-		// ss << " " << vec.capacity();
+		ss << " " << vec.capacity();
 		ss << " " << vec.size();
 		_time = 0;
 		return (ss.str());

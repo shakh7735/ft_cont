@@ -22,7 +22,7 @@ namespace	NS_TEST
 		std::ostringstream	ss;
 
 		NS::vector<int> vec(5, int(58));
-		// ss << " " << vec.capacity();
+		ss << " " << vec.capacity();
 		ss << " " << vec.size();
 		NS::vector<int> vec1(2, int(42));
 		vec.insert(vec.begin() + 2, vec1.begin(), vec1.end());
@@ -30,7 +30,7 @@ namespace	NS_TEST
 		vec.insert(vec.end(), vec1.begin(), vec1.end());
 		for (size_t i = 0; i < vec.size(); ++i)
 			ss << ' ' << vec[i];
-		// ss << " " << vec.capacity();
+		ss << " " << vec.capacity();
 		ss << " " << vec.size();
 		vec.reserve(30);
 		NS::vector<int> vec2(2, int(21));
@@ -39,7 +39,7 @@ namespace	NS_TEST
 		vec.insert(vec.end(), vec2.begin(), vec2.end());
 		for (size_t i = 0; i < vec.size(); ++i)
 			ss << ' ' << vec[i];
-		// ss << " " << vec.capacity();
+		ss << " " << vec.capacity();
 		ss << " " << vec.size();
 		_time = 0;
 		return (ss.str());

@@ -36,10 +36,10 @@ namespace   ft {
 				s_node( void )    :   data(0), left(0), 
                         right(0), parent (0), nil(true), color( BLACK )  {}
 				// s_node( const s_node &x)   { *this = x; }
-				
+			
 				// s_node &operator=(const s_node &x){
-				// 	if (*this != x) {
-				// 		data = x.data; 
+				// 	if (*this != x){
+				// 		data = x.data ; 
 				// 		left = x.left; 
                 //         right= x.right; 
 				// 		parent = x.parent;
@@ -82,13 +82,13 @@ namespace   ft {
 				IteratorMap	(const IteratorMap<B> & other, typename ft::enable_if<!B>::type* = 0)	: ptr(other.getPtr())	{}
 
 				IteratorMap &operator=	(const IteratorMap & other)	
-				{ ptr = other.ptr; return (*this); }
+				{ ptr = other.getPtr(); return (*this); }
 
 				virtual ~IteratorMap	(void)			{}
 			///////////////////////////////////////////////////////////////////////////
 
-				bool	operator==	(const IteratorMap & x) const	{ return (ptr == x.ptr); }
-				bool	operator!=	(const IteratorMap & x) const	{ return (ptr != x.ptr); }
+				bool	operator==	(const IteratorMap & x) const	{ return (ptr == x.getPtr()); }
+				bool	operator!=	(const IteratorMap & x) const	{ return (ptr != x.getPtr()); }
 				
 				IteratorMap &	operator++	()		{ this->nextNode(); return (*this); }
 				IteratorMap &	operator--	()		{ this->prevNode(); return (*this); }
@@ -346,17 +346,27 @@ namespace   ft {
 				iterator it = begin();
 				iterator end_it = end();
 				node *f;
-
+				
 				while (it != end_it)
 				{
 					
 					f = it.getPtr();
-					it++;
-					if (f == nil_node)
+					if (f->nil)
 						break;
+					it++;
+					if (f->parent)
+					{
+						if (f->parent->left == f)
+							f->parent->left = nil_node;
+						else if (f->parent->right == f)
+							f->parent->right = nil_node;
+					}
+					f->left->parent = f->parent;
+					f->right->parent = f->parent;
 					alloc.destroy(f);
 					alloc.deallocate(f, 1);
 				}
+				
 				alloc.deallocate(nil_node, 1);
 			}
 
@@ -389,7 +399,7 @@ namespace   ft {
 			};
 // DESTRUCTOR-------------------------------------------------------------------
             ~map()
-			{	deletedTree();	};//
+			{ deletedTree();	};//
 /*Iterators:----------------------------------------------------------------------
 begin	Return iterator to beginning (public member function)
 end	Return iterator to end (public member function)
@@ -445,14 +455,14 @@ at	Access element (public member function)--------------------------------------
 		mapped_type& at (const key_type& k) {
 			iterator x = find(k);	
 			if(x == end())
-				throw std::out_of_range("out out_of_range");
+				throw std::out_of_range("map::at:  key not found");
 			return (x->second);	
 			}
 
 		const mapped_type& at (const key_type& k) const	{
 			const_iterator x = find(k);	
 			if(x == end())
-				throw std::out_of_range("out out_of_range");
+				throw std::out_of_range ("map::at:  key not found");
 			return (x->second);	}
 
 /*Modifiers:-----------------------------------------------------------------------
@@ -468,6 +478,7 @@ emplace_hint	Construct and insert element with hint (public member function)----
 				if (!it.getPtr()->nil)
 					return ft::make_pair(it, false);
 				node *n = insertNode(val);
+				
 				return ft::make_pair(iterator(n), true);
 			}
 	
