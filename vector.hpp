@@ -3,6 +3,7 @@
 
 # include "Iterator.hpp"
 # include "equal.hpp"
+# include "iterator_traits.hpp"
 
 # include <memory>
 # include <algorithm>

@@ -30,9 +30,33 @@ namespace   ft {
 				bool 					nil;
 				bool					color;
 
-				s_node (ft::pair<const Key, T> data) : data(data) { if (key()) nil = false; }
+				s_node (ft::pair<const Key, T> data) : data(data),left(0), 
+                        right(0), parent (0), nil(true), color( BLACK )
+					 { if (key() != Key()) nil = false; }
 				s_node( void )    :   data(0), left(0), 
                         right(0), parent (0), nil(true), color( BLACK )  {}
+				s_node( const s_node &x)   { *this = x; }
+				// s_node &operator=(ft::pair<const Key, T> data){
+				// 		this->data =data ; 
+				// 		left = 0; 
+                //         right= 0; 
+				// 		parent = 0;
+				// 	    nil = false; 
+				// 		color = BLACK;
+				// 	return *this;
+				// }
+				s_node &operator=(const s_node &x){
+					if (*this != x){
+						data = x.data ; 
+						left = x.left; 
+                        right= x.right; 
+						parent = x.parent;
+					    nil = x.nil; 
+						color = x.color;
+					}
+					return *this;
+				}
+
 				const Key &	key (void)	{ return (data.first); }
 				T &			val (void)	{ return (data.second);}
 			} 								node;
@@ -267,7 +291,7 @@ namespace   ft {
 			typedef		IteratorMap<true>									const_iterator;
 			typedef 	IteratorRevMap<false>								reverse_iterator;
 			typedef 	IteratorRevMap<true>								const_reverse_iterator;
-			// typedef typename iterator_traits<iterator>::difference_type		difference_type;
+			typedef typename iterator_traits<iterator>::difference_type		difference_type;
             typedef size_t	size_type;
 
         private:
@@ -426,9 +450,18 @@ at	Access element (public member function)--------------------------------------
 			return (it.first->second);
 		}
 		
-		mapped_type& at (const key_type& k) {	return (find(k)->second);	}
+		mapped_type& at (const key_type& k) {
+			iterator x = find(k);	
+			if(x == end())
+				throw std::out_of_range("out out_of_range");
+			return (x->second);	
+			}
 
-		const mapped_type& at (const key_type& k) const	{	return (find(k)->second);	}
+		const mapped_type& at (const key_type& k) const	{
+			const_iterator x = find(k);	
+			if(x == end())
+				throw std::out_of_range("out out_of_range");
+			return (x->second);	}
 
 /*Modifiers:-----------------------------------------------------------------------
 insert	Insert elements (public member function)							ok
