@@ -78,7 +78,7 @@
             {	insert(begin(), first, last);	};
 
 			vector( const vector& x )								
-            {  *this = x;   };
+            { _size = 0; _capacity = 0; *this = x;   };
 
 			vector&					operator = (const vector& x)
 			{
@@ -200,6 +200,7 @@
 							typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0 )
         {
             size_type n = ft::distance(first, last);
+            // std::cout << "distance = " << n << std::endl;
             clear();
             reserve(n);
             while (n > _size)	
@@ -252,7 +253,6 @@
                 throw std::length_error("_Maximum_size_out");
             value_type *tmp = _alloc.allocate(new_cap);
             size_type i = 0;
-            size_type a = 0;
             while(i < new_size){
                 if (pos == position) {
                     while (n > 0) {
@@ -260,8 +260,8 @@
                         n--;
                     }
                 }
-                else
-                    _alloc.construct(&tmp[i++], arr[a++]);
+                if (pos != end())
+                    _alloc.construct(&tmp[i++], (*pos));
                 ++pos;
             }
             deallocateArray();
@@ -285,13 +285,11 @@
             
             if (new_cap == 0 || dist == 0 )
                 return ;
-            // reserve(new_cap);
-            
-            // value_type * tmp = _alloc.allocate(new_cap);
             
             if (new_cap > max_size())
                 throw std::length_error("_Maximum_size_out");
             value_type *tmp = _alloc.allocate(new_cap);
+
             size_type i = 0;
             size_type a = 0;
             while(i < new_size){
@@ -300,7 +298,7 @@
                         _alloc.construct(&tmp[i++], (*first++));
                     }
                 }
-                else
+                if (pos != end())
                     _alloc.construct(&tmp[i++], arr[a++]);
                 ++pos;
             }
@@ -315,7 +313,6 @@
         iterator erase (iterator first, iterator last)
         {
             int ind_first = -1;
-            // int ind_last = -1;
             size_type dist = ft::distance(first, last);
             
             iterator it = begin();
@@ -345,7 +342,7 @@
 				ft::swap(_size, other._size);
         }
         
-        void clear() {   while (size()) pop_back();  }
+        void clear() {   while (_size > 0) pop_back();  }
         
  // ============================================================================
  

@@ -28,6 +28,7 @@ void vec_test_ctor_copy()
         if (&v1[0] == &v2[0]) {
             PRINT_MSG("Copy ctor doesn't do a deep copy!");
         }
+        
     }
 
     {

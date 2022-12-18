@@ -35,27 +35,19 @@ namespace   ft {
 					 { if (key() != Key()) nil = false; }
 				s_node( void )    :   data(0), left(0), 
                         right(0), parent (0), nil(true), color( BLACK )  {}
-				s_node( const s_node &x)   { *this = x; }
-				// s_node &operator=(ft::pair<const Key, T> data){
-				// 		this->data =data ; 
-				// 		left = 0; 
-                //         right= 0; 
-				// 		parent = 0;
-				// 	    nil = false; 
-				// 		color = BLACK;
+				// s_node( const s_node &x)   { *this = x; }
+				
+				// s_node &operator=(const s_node &x){
+				// 	if (*this != x) {
+				// 		data = x.data; 
+				// 		left = x.left; 
+                //         right= x.right; 
+				// 		parent = x.parent;
+				// 	    nil = x.nil; 
+				// 		color = x.color;
+				// 	}
 				// 	return *this;
 				// }
-				s_node &operator=(const s_node &x){
-					if (*this != x){
-						data = x.data ; 
-						left = x.left; 
-                        right= x.right; 
-						parent = x.parent;
-					    nil = x.nil; 
-						color = x.color;
-					}
-					return *this;
-				}
 
 				const Key &	key (void)	{ return (data.first); }
 				T &			val (void)	{ return (data.second);}
