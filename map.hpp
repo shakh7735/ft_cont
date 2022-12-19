@@ -35,19 +35,6 @@ namespace   ft {
 					 { if (key() != Key()) nil = false; }
 				s_node( void )    :   data(0), left(0), 
                         right(0), parent (0), nil(true), color( BLACK )  {}
-				// s_node( const s_node &x)   { *this = x; }
-			
-				// s_node &operator=(const s_node &x){
-				// 	if (*this != x){
-				// 		data = x.data ; 
-				// 		left = x.left; 
-                //         right= x.right; 
-				// 		parent = x.parent;
-				// 	    nil = x.nil; 
-				// 		color = x.color;
-				// 	}
-				// 	return *this;
-				// }
 
 				const Key &	key (void)	{ return (data.first); }
 				T &			val (void)	{ return (data.second);}
@@ -56,7 +43,7 @@ namespace   ft {
 //============================================
 
 		template <bool IsConst>
-		class IteratorMap{ 
+		class IteratorMap  { 
 			public:
 				typedef					ft::pair<const Key, T>										pair_type;
 				typedef typename		ft::conditional<IsConst, const pair_type, pair_type>::type	value_type;
@@ -81,6 +68,7 @@ namespace   ft {
 				template <bool B>
 				IteratorMap	(const IteratorMap<B> & other, typename ft::enable_if<!B>::type* = 0)	: ptr(other.getPtr())	{}
 
+				
 				IteratorMap &operator=	(const IteratorMap & other)	
 				{ ptr = other.getPtr(); return (*this); }
 
@@ -101,6 +89,9 @@ namespace   ft {
 				node_type  * 	getPtr	() const    { return ptr;     }
 				
 				IteratorMap<IsConst> 	base	() 	{ return (*this);}
+				
+				operator  IteratorMap<false>  () const		{	return IteratorMap<false>(ptr);		};
+				
 			private:
 
 				void nextNode()
@@ -269,15 +260,15 @@ namespace   ft {
 					{ return (comp(x.first, y.first)); }
 			};
 			
-			// typedef A												allocator_type;
+			// typedef A														allocator_type;
 			typedef typename A::template rebind<node>::other				allocator_type;
 
 			
 
-			typedef typename allocator_type::reference						reference;
-			typedef typename allocator_type::const_reference				const_reference;
-			typedef typename allocator_type::pointer						pointer;
-			typedef typename allocator_type::const_pointer					const_pointer;
+			typedef  value_type&						reference;
+			typedef  value_type const &					const_reference;
+			typedef  value_type*						pointer;
+			typedef  value_type const *					const_pointer;
 
 			typedef		IteratorMap<false>									iterator;
 			typedef		IteratorMap<true>									const_iterator;

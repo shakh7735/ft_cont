@@ -7,42 +7,6 @@
 
 #define NS ft
 
-    const std::string	vec_example12()
-	{
-        double _time;
-		
-                std::ostringstream      ss;
-
-                NS::vector<int> vec(5, int(58));
-                ss << " " << vec.capacity();
-                ss << " " << vec.size();
-                NS::vector<int>::iterator it = vec.begin() + 2;
-                vec.insert(it, 1);
-                it = vec.insert(vec.begin(), 1);
-                vec.insert(vec.end(), 1);
-                for (size_t i = 0; i < vec.size(); ++i)
-                        ss << ' ' << vec[i];
-                ss << " " << vec.capacity();
-                ss << " " << vec.size();
-                ss << " " << *it;
-                vec.reserve(30);
-                it = vec.begin() + 2;
-                for (size_t i = 0; i < vec.size(); ++i)
-                        ss << ' ' << vec[i];
-                ss << " " << vec.capacity();
-                ss << " " << vec.size();
-                NS::vector<int> vec5;
-                vec5.insert(vec5.begin(), 9);
-                vec5.insert(vec5.end() - 1, 3, 10);
-                for (size_t i = 0; i < vec5.size(); ++i)
-                        ss << ' ' << vec5[i];
-                ss << " " << vec5.capacity();
-                ss << " " << vec5.size();
-                _time = 0;
-		return (ss.str());
-	}
-
-
 
 template <typename T>
 std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
@@ -90,9 +54,34 @@ const std::string       map_example12(double &_time)
                 return (ss.str());
         }
 
+const std::string	map_example22(double &_time)
+	{
+		std::ostringstream	ss;
+
+		std::vector<int> v;
+		NS::map<int, int, std::greater<int> > mp2;
+		mp2.insert(NS::make_pair(20, 20));
+		mp2.insert(NS::make_pair(30, 30));
+		mp2.insert(NS::make_pair(40, 40));
+		mp2.insert(NS::make_pair(50, 50));
+		mp2.insert(NS::make_pair(60, 60));
+		NS::map<int, int>::iterator it;
+		for (int i = 11; i < 70; i += 10) {
+			it = mp2.upper_bound(i);
+			if (i == 11)
+				v.push_back((it == mp2.end()));
+			else
+				v.push_back(it->first);
+		}
+		for (std::vector<int>::iterator it1 = v.begin(); it1 != v.end(); ++it1)
+			ss << " " << *it1;
+		_time = 0;
+		return (ss.str());
+	}
+
 int main()
 {
         double _time;
-    std::cout << map_example12(_time);
+    std::cout << map_example22(_time) << std::endl;
     return (0);
 }

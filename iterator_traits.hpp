@@ -4,6 +4,8 @@
 # include "equal.hpp"
 # include <cstddef>
 # include <iterator>
+# include <typeinfo>
+# include <stdexcept>
 // # include "Iterator.hpp"
 
 namespace   ft {
@@ -56,151 +58,228 @@ namespace   ft {
 		return n;
 	}
 //=========================================================================================================================
+	
+	// struct output_iterator_tag { };
 
-	// struct input_iterator_tag {};
-	// struct output_iterator_tag {};
-	// struct forward_iterator_tag : public input_iterator_tag {};
-	// struct bidirectional_iterator_tag : public forward_iterator_tag {};
-	// struct random_access_iterator_tag : public bidirectional_iterator_tag {};
+	// struct input_iterator_tag { };
+	
+	// struct forward_iterator_tag { };
 
-	// template<typename _Category, typename _Tp, typename _Distance = ptrdiff_t,
-	// 				 typename _Pointer = _Tp*, typename _Reference = _Tp&>
-	// 	struct iterator
-	// 	{
-	// 		typedef _Category	iterator_category;
-	// 		typedef _Tp			value_type;
-	// 		typedef _Distance	difference_type;
-	// 		typedef _Pointer	pointer;
-	// 		typedef _Reference	reference;
-	// 	};
+    // struct bidirectional_iterator_tag : public ft::input_iterator_tag { };
 
-	// template<typename _Iterator>
-	// 	struct iterator_traits
-	// 	{
-	// 		typedef typename _Iterator::iterator_category	iterator_category;
-	// 		typedef typename _Iterator::value_type			value_type;
-	// 		typedef typename _Iterator::difference_type		difference_type;
-	// 		typedef typename _Iterator::pointer				pointer;
-	// 		typedef typename _Iterator::reference			reference;
-	// 	};
+	// struct random_access_iterator_tag { };
 
-	// template<typename _Tp>
-	// 	struct iterator_traits<_Tp*>
-	// 	{
-	// 		typedef random_access_iterator_tag	iterator_category;
-	// 		typedef _Tp							value_type;
-	// 		typedef ptrdiff_t					difference_type;
-	// 		typedef _Tp*						pointer;
-	// 		typedef _Tp&						reference;
-	// 	};
+    
 
-	// template<typename _Tp>
-	// 	struct iterator_traits<const _Tp*>
-	// 	{
-	// 		typedef random_access_iterator_tag	iterator_category;
-	// 		typedef _Tp							value_type;
-	// 		typedef ptrdiff_t					difference_type;
-	// 		typedef const _Tp*					pointer;
-	// 		typedef const _Tp&					reference;
-	// 	};
+    
 
-	// template<typename _Iter>
-	// 	typename ft::iterator_traits<_Iter>::iterator_category
-	// 	iterator_category(const _Iter&)
-	// 	{
-	// 		return (typename ft::iterator_traits<_Iter>::iterator_category());
-	// 	}
+    // template <bool is_valid, typename T>
+    //     struct valid_iterator_tag_res { typedef T type; const static bool value = is_valid; };
+    
+    // template <typename T>
+    //     struct is_input_iterator_tagged : public valid_iterator_tag_res<false, T> { };
 
-	// template<typename _Iterator, bool _HasBase>
-	// 	struct _Iter_base
-	// 	{
-	// 		typedef _Iterator iterator_type;
-	// 		static iterator_type _S_base(_Iterator it)
-	// 		{
-	// 			return (it);
-	// 		}
-	// 	};
+    // /* Check is_input_iterator_tagged from ft::random_access_iterator_tag */
+    // template <>
+    //     struct is_input_iterator_tagged<ft::random_access_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::random_access_iterator_tag> { };
 
-	// template<typename _Iterator>
-	// 	struct _Iter_base<_Iterator, true>
-	// 	{
-	// 		typedef typename _Iterator::iterator_type iterator_type;
-	// 		static iterator_type _S_base(_Iterator it)
-	// 		{
-	// 			return (it.base());
-	// 		}
-	// 	};
+    // /* Check is_input_iterator_tagged from ft::bidirectional_iterator_tag */
+    // template <>
+    //     struct is_input_iterator_tagged<ft::bidirectional_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::bidirectional_iterator_tag> { };
 
+    // /* Check is_input_iterator_tagged from ft::forward_iterator_tag */
+    // template <>
+    //     struct is_input_iterator_tagged<ft::forward_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::forward_iterator_tag> { };
 
+    // /* Check is_input_iterator_tagged from ft::input_iterator_tag */
+    // template <>
+    //     struct is_input_iterator_tagged<ft::input_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::input_iterator_tag> { };
 
-	// template<typename _InputIterator>
-	// 	typename ft::iterator_traits<_InputIterator>::difference_type
-	// 	distance(_InputIterator first, _InputIterator last,
-	// 						 input_iterator_tag)
-	// 	{
-	// 		typename ft::iterator_traits<_InputIterator>::difference_type n = 0;
-	// 		while (first != last)
-	// 		{
-	// 			++first;
-	// 			++n;
-	// 		}
-	// 		return (n);
-	// 	}
+    // template <typename T>
+    //     struct is_ft_iterator_tagged : public valid_iterator_tag_res<false, T> { };
+    
+    // /* Check is_ft_iterator_tagged from ft::random_access_iterator_tag */
+    // template <>
+    //     struct is_ft_iterator_tagged<ft::random_access_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::random_access_iterator_tag> { };
 
-	// template<typename _RandomAccessIterator>
-	// 	typename ft::iterator_traits<_RandomAccessIterator>::difference_type
-	// 	distance(_RandomAccessIterator first, _RandomAccessIterator last,
-	// 						 random_access_iterator_tag)
-	// 	{
-	// 		return (last - first);
-	// 	}
+    // /* Check is_ft_iterator_tagged from ft::bidirectional_iterator_tag */
+    // template <>
+    //     struct is_ft_iterator_tagged<ft::bidirectional_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::bidirectional_iterator_tag> { };
 
-	// template<typename _InputIterator>
-	// 	inline
-	// 	typename ft::iterator_traits<_InputIterator>::difference_type
-	// 	distance(_InputIterator first, _InputIterator last)
-	// 	{
-	// 		return (ft::distance(first, last,
-	// 				 ft::iterator_category(first)));
-	// 	}
+    // /* Check is_ft_iterator_tagged from ft::forward_iterator_tag */
+    // template <>
+    //     struct is_ft_iterator_tagged<ft::forward_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::forward_iterator_tag> { };
 
-	// template<typename _InputIterator, typename _Distance>
-	// 	inline void
-	// 	advance(_InputIterator& i, _Distance n, input_iterator_tag)
-	// 	{
-	// 		while (n--)
-	// 			++i;
-	// 	}
+    // /* Check is_ft_iterator_tagged from ft::input_iterator_tag */
+    // template <>
+    //     struct is_ft_iterator_tagged<ft::input_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::input_iterator_tag> { };
 
-	// template<typename _BidirectionalIterator, typename _Distance>
-	// 	inline void
-	// 	advance(_BidirectionalIterator& i, _Distance n,
-	// 			bidirectional_iterator_tag)
-	// 	{
-	// 		if (n > 0)
-	// 			while (n--)
-	// 				++i;
-	// 		else
-	// 			while (n++)
-	// 				--i;
-	// 	}
+    // /* Check is_ft_iterator_tagged from ft::output_iterator_tag */
+    // template <>
+    //     struct is_ft_iterator_tagged<ft::output_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::output_iterator_tag> { };
 
-	// template<typename _RandomAccessIterator, typename _Distance>
-	// 	inline void
-	// 	advance(_RandomAccessIterator& i, _Distance n,
-	// 						random_access_iterator_tag)
-	// 	{
-	// 		i += n;
-	// 	}
+    // template <typename T>
+    // class InvalidIteratorException : public std::exception
+    // {
+    //     private:
+    //         std::string _msg;
+        
+    //     public :
+    //         InvalidIteratorException () throw() { _msg = "Is invalid iterator tag : " + std::string(typeid(T).name()); }
+    //         InvalidIteratorException (const InvalidIteratorException&) throw() {}
+    //         InvalidIteratorException& operator= (const InvalidIteratorException&) throw() {}
+    //         virtual ~InvalidIteratorException() throw() {}
+    //         virtual const char* what() const throw() { return (_msg.c_str()); }
+    // };
 
-	// template<typename _InputIterator, typename _Distance>
-	// 	inline void
-	// 	advance(_InputIterator& i, _Distance n)
-	// 	{
-	// 		typename ft::iterator_traits<_InputIterator>::difference_type d = n;
-	// 		ft::advance(i, d, ft::iterator_category(i));
-	// 	}
+    // /*
+    // ** @brief Iterator traits class defining properties of
+    // ** iterators. In this, iterator_traits obtains information
+    // ** from Iterator class in template argument.
+    // */
+    // template <class Iterator> struct iterator_traits
+    // {
+    //     /* Result of subtracting one iterator from another, from Iterator. */
+    //     typedef typename Iterator::difference_type       difference_type;
 
+    //     /* Type of the element where iterator point, from Iterator. */
+    //     typedef typename Iterator::value_type            value_type;
+
+    //     /* Type of a pointer to an element where the iterator point, from Iterator. */
+    //     typedef typename Iterator::pointer               pointer;
+
+    //     /* Type of a reference where iterator point, from Iterator. */
+    //     typedef typename Iterator::reference             reference;
+
+    //     /* The iterator category from Iterator. */
+    //     typedef typename Iterator::iterator_category     iterator_category;
+    // };
+    
+    // /*
+    // ** @brief Iterator traits class defining properties of
+    // ** iterators. This create a default operation with an
+    // ** object (first argument in tempate argument).
+    // */
+    // template <class T> struct iterator_traits<T*>
+    // {
+    //     /* Result of subtracting one iterator from another. */
+    //     typedef ptrdiff_t                       difference_type;
+
+    //     /* Type of the element where iterator point. */
+    //     typedef T                               value_type;
+
+    //     /* Type of a pointer to an element where the iterator point. */
+    //     typedef T*                              pointer;
+
+    //     /* Type of a reference where iterator point. */
+    //     typedef T&                              reference;
+
+    //     /* The iterator category from Iterator. */
+    //     typedef ft::random_access_iterator_tag  iterator_category;
+    // };
+    
+    // /*
+    // ** @brief Iterator traits class defining properties of
+    // ** iterators. This create a default operation with a
+    // ** const object (first argument in tempate argument).
+    // */
+    // template <class T> class iterator_traits<const T*>
+    // {
+    //     /* Result of subtracting one iterator from another. */
+    //     typedef ptrdiff_t                       difference_type;
+
+    //     /* Type of the element where iterator point. */
+    //     typedef T                               value_type;
+
+    //     /* Type of a pointer to an element where the iterator point. */
+    //     typedef const T*                        pointer;
+
+    //     /* Type of a reference where iterator point. */
+    //     typedef const T&                        reference;
+
+    //     /* The iterator category from Iterator. */
+    //     typedef ft::random_access_iterator_tag  iterator_category;
+    // };
+
+    // /*
+    // ** @brief Give a difference_type defined in ft::iterator_traits
+    // ** that's the difference of address in memory
+    // ** between last and first iterator.
+    // **
+    // ** @param first The first iterator.
+    // ** @param last The last iterator.
+    // ** @return The difference.
+    // */
+    // template<class InputIterator>
+    //     typename ft::iterator_traits<InputIterator>::difference_type
+    //         distance (InputIterator first, InputIterator last)
+    //     {
+    //         typename ft::iterator_traits<InputIterator>::difference_type rtn = 0;
+    //         while (first != last)
+    //         {
+    //             first++;
+    //             rtn++;
+    //         }
+    //         return (rtn);
+    //     }
+
+    // /*
+    // ** @brief Base class for iterator, not really usefull, but type
+    // ** defined can be use for iterator_traits. An iterator permeted to
+    // ** take any element range in an object and using a set of operators.
+    // */
+    // template <class Category, class T, class Distance = ptrdiff_t,
+    //     class Pointer = T*, class Reference = T&>
+    //     class iterator
+    //     {
+    //         public:
+    //             /* Type of elements pointed. */
+    //             typedef T           value_type;
+
+    //             /* Type to represent the difference between two iterators. */
+    //             typedef Distance    difference_type;
+
+    //             /* Type to represent a pointer to an element pointed */
+    //             typedef Pointer     pointer;
+
+    //             /* Type to represent a reference to an element pointed */
+    //             typedef Reference   reference;
+
+    //             /* Category of the iterator. */
+    //             typedef Category    iterator_category;
+    //     };
+
+	//  template <class T>
+    //     class bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>
+    //     {  
+    //         /* Category of the iterator. */
+    //         typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::iterator_category     iterator_category;
+            
+    //         /* Type of elements pointed. */
+    //         typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::value_type            value_type;
+            
+    //         /* Type to represent the difference between two iterators. */
+    //         typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::difference_type       difference_type;
+            
+    //         /* Type to represent a pointer to an element pointed */
+    //         typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::pointer               pointer;
+            
+    //         /* Type to represent a reference to an element pointed */
+    //         typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference             reference;
+            
+    //         private:
+    //             /* Element pointed by the iterator. */
+    //             pointer _elem;
+    //     };
 
 }
 
