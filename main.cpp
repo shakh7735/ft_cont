@@ -8,30 +8,30 @@
 #define NS ft
 
 
-template <typename T>
-std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
-{
-	o << "key: " << iterator->first << " | value: " << iterator->second;
-	if (nl)
-		o << std::endl;
-	return ("");
-}
+// template <typename T>
+// std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
+// {
+// 	o << "key: " << iterator->first << " | value: " << iterator->second;
+// 	if (nl)
+// 		o << std::endl;
+// 	return ("");
+// }
 
 
-template <typename T_MAP>
-void	printSize(T_MAP const &mp, bool print_content = 1)
-{
-	std::cout << "size: " << mp.size() << std::endl;
-	std::cout << "max_size: " << mp.max_size() << std::endl;
-	if (print_content)
-	{
-		typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
-		std::cout << std::endl << "Content is:" << std::endl;
-		for (; it != ite; ++it)
-			std::cout << "- " << printPair(it, false) << std::endl;
-	}
-	std::cout << "###############################################" << std::endl;
-}
+// template <typename T_MAP>
+// void	printSize(T_MAP const &mp, bool print_content = 1)
+// {
+// 	std::cout << "size: " << mp.size() << std::endl;
+// 	std::cout << "max_size: " << mp.max_size() << std::endl;
+// 	if (print_content)
+// 	{
+// 		typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
+// 		std::cout << std::endl << "Content is:" << std::endl;
+// 		for (; it != ite; ++it)
+// 			std::cout << "- " << printPair(it, false) << std::endl;
+// 	}
+// 	std::cout << "###############################################" << std::endl;
+// }
 
 const std::string       map_example12(double &_time)
         {
@@ -53,6 +53,19 @@ const std::string       map_example12(double &_time)
                 _time = 0;
                 return (ss.str());
         }
+const std::string	map_example11(double &_time)
+	{
+		std::ostringstream	ss;
+
+		NS::map<char, int>			A;
+		NS::pair<const char, int>	*p;
+		(void)p;
+
+		// p = A.get_allocator().allocate(42);
+		// A.get_allocator().deallocate(p, 42);
+		_time = 0;
+		return (ss.str());
+	}
 
 const std::string	map_example22(double &_time)
 	{
@@ -76,6 +89,28 @@ const std::string	map_example22(double &_time)
 		for (std::vector<int>::iterator it1 = v.begin(); it1 != v.end(); ++it1)
 			ss << " " << *it1;
 		_time = 0;
+		return (ss.str());
+	}
+
+	const std::string	map_example50(double &_time)
+	{
+		std::ostringstream	ss;
+		clock_t				start;
+		clock_t				end;
+		NS::map<int, int>	mp;
+
+		for (int i = 0, j = 0; i < 1000000; ++i, ++j)
+			mp.insert(NS::make_pair(i, j));
+
+		start = clock();
+		ss << " " << mp.size();
+		end = clock();
+		_time = (double)(end - start);
+
+		for (int i = 0; i < 430000; ++i)
+			mp.erase(i);
+		ss << " " << mp.size();
+
 		return (ss.str());
 	}
 
