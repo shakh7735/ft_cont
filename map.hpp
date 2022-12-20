@@ -68,11 +68,11 @@ namespace   ft {
 				template <bool B>
 				IteratorMap	(const IteratorMap<B> & other, typename ft::enable_if<!B>::type* = 0)	: ptr(other.getPtr())	{}
 
-				
+
 				IteratorMap &operator=	(const IteratorMap & other)	
 				{ ptr = other.getPtr(); return (*this); }
 
-				virtual ~IteratorMap	(void)			{}
+				virtual ~IteratorMap	(void)	{}
 			///////////////////////////////////////////////////////////////////////////
 
 				bool	operator==	(const IteratorMap & x) const	{ return (ptr == x.getPtr()); }
