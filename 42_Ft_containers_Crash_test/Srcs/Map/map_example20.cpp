@@ -35,14 +35,14 @@ namespace	NS_TEST
 		ss << " " << A.at('a');
 		ss << " " << A.at('b');
 		ss << " " << A.at('c');
-		// try
-		// {
-		// 	A.at('t');
-		// }
-		// catch (const std::exception &e)
-		// {
-		// 	ss << " " << e.what();
-		// }
+		try
+		{
+			A.at('t');
+		}
+		catch (const std::exception &e)
+		{
+			ss << " " << e.what();
+		}
 		_time = 0;
 		return (ss.str());
 	}

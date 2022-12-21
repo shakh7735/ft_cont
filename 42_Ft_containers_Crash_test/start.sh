@@ -105,6 +105,55 @@ VECTOR_FUNCTIONS=(
 					"vec_example26"
 					"vec_example27"
 					"vec_example28"
+					"vec_example29"
+					"vec_example30"
+					"vec_example31"
+					"vec_example32"
+					"vec_example33"
+					"vec_example34"
+					"vec_example35"
+					"vec_example36"
+					"vec_example37"
+					"vec_example38"
+					"vec_example39"
+					"vec_example40"
+					"vec_example41"
+					"vec_example42"
+					"vec_example43"
+					"vec_example44"
+					"vec_example45"
+					"vec_example46"
+					"vec_example47"
+					"vec_example48"
+					"vec_example49"
+					"vec_example50"
+					"vec_example51"
+					"vec_example52"
+					"vec_example53"
+					"vec_example54"
+					"vec_example55"
+					"vec_example56"
+					"vec_example57"
+					"vec_example58"
+					"vec_example59"
+					"vec_example60"
+					"vec_example61"
+					"vec_example62"
+					"vec_example63"
+					"vec_example64"
+					"vec_example65"
+					"vec_example66"
+					"vec_example67"
+					"vec_example68"
+					"vec_example69"
+					"vec_example70"
+					"vec_example71"
+					"vec_example72"
+					"vec_example73"
+					"vec_example74"
+					"vec_example75"
+					"vec_example76"
+					"vec_example77"
 				 );
 
 for FUNC in "${VECTOR_FUNCTIONS[@]}"
@@ -184,7 +233,7 @@ MAP_FUNCTIONS=(
 				"map_example39"
 				"map_example40"
 				"map_example41"
-				"map_example42"
+#				"map_example42"
 				"map_example43"
 				"map_example44"
 				"map_example45"
@@ -194,7 +243,8 @@ MAP_FUNCTIONS=(
 				"map_example49"
 				"map_example50"
 				"map_example51"
-				"map_example52"
+#				"map_example52"
+				"map_example53"
 			  );
 
 for FUNC in "${MAP_FUNCTIONS[@]}"
@@ -252,8 +302,8 @@ fi
 
 if ! test -z "$vector"; then
 	if ! test -e "$vector"; then
-		printf "${COLOR_RED_B}Error: Vector: file does not found: $vector.\n";
-		printf "       Correct path in config.sh and try again.\n"
+		printf "\n${COLOR_RED_B}Error: Vector: file does not found: $vector.\n";
+		printf "        Correct path in config.sh and try again.\n"
 		exit 1;
 	else
 		printf "\n${COLOR_GREEN_B}Vector: file found.";
@@ -262,8 +312,8 @@ fi
 
 if ! test -z "$stack"; then
 	if ! test -e "$stack"; then
-		printf "${COLOR_RED_B}Error: Stack: file does not found: $stack.\n";
-		printf "       Correct path in config.sh and try again.\n"
+		printf "\n${COLOR_RED_B}Error:  Stack: file does not found: $stack.\n";
+		printf "        Correct path in config.sh and try again.\n"
 		exit 1;
 	else
 		printf "\n${COLOR_GREEN_B}Stack:  file found.";
@@ -272,8 +322,8 @@ fi
 
 if ! test -z "$map"; then
 	if ! test -e "$map"; then
-		printf "${COLOR_RED_B}Error: Map: file does not found: $map.\n";
-		printf "       Correct path in config.sh and try again.\n"
+		printf "\n${COLOR_RED_B}Error:  Map: file does not found: $map.\n";
+		printf "        Correct path in config.sh and try again.\n"
 		exit 1;
 	else
 		printf "\n${COLOR_GREEN_B}Map:    file found.";

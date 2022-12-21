@@ -1,47 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_example23.cpp                                  :+:      :+:    :+:   */
+/*   vec_example43.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vismaily <nenie_iri@mail.ru>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/12 16:24:35 by vismaily          #+#    #+#             */
-/*   Updated: 2022/12/18 14:18:44 by tumolabs         ###   ########.fr       */
+/*   Created: 2022/12/19 13:49:28 by vismaily          #+#    #+#             */
+/*   Updated: 2022/12/19 13:52:20 by vismaily         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* Example 23 */
-/* assign overload */
+/* Example 43 */
+/* insert(std iterators) */
 
 #include "test.hpp"
 
 namespace	NS_TEST
 {
-	const std::string	map_example23(double &_time)
+	const std::string	vec_example43(double &_time)
 	{
 		std::ostringstream	ss;
 		clock_t				start;
 		clock_t				end;
-		NS::map<int, int>	mp;
-		NS::map<int, int>	mp2;
+		NS::vector<int>		_vector;
 
-		for (int i = 0, j = 10; i < 200000; ++i, ++j)
-			mp.insert(NS::make_pair(i, j));
-		for (int i = 200000, j = 200010; i < 400000; ++i, ++j)
-			mp2.insert(NS::make_pair(i, j));
+		std::vector<int>	tmp;
+		tmp.assign(26000000, 1);
+		_vector.assign(42000000, 7);
 
 		start = clock();
-		mp2 = mp;
+		_vector.insert(_vector.begin(), tmp.begin(), tmp.end());
 		end = clock();
 		_time = (double)(end - start);
 
-		NS::map<int, int>::iterator it = mp2.begin();
-		for (; it != mp2.end(); it++)
-		{
-			ss << " " << it->first;
-			ss << " " << it->second;
-		}
-		ss << " " << mp2.size();
+		for (size_t i = 0; i < tmp.size(); ++i)
+			ss << " " << (_vector[i]);
+		ss << " " << (_vector.size());
+		ss << " " << (_vector.capacity());
 
 		return (ss.str());
 	}

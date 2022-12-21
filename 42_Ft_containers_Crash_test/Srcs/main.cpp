@@ -6,7 +6,7 @@
 /*   By: vismaily <nenie_iri@mail.ru>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 12:20:25 by vismaily          #+#    #+#             */
-/*   Updated: 2022/12/15 19:06:55 by tumolabs         ###   ########.fr       */
+/*   Updated: 2022/12/20 19:44:38 by vismaily         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,21 @@ int	main()
 		   
 			char	command_0[] = "leaks";
 			ss << parent;
-			char	*command_1 = &(ss.str()[0]);
-			char	command_2[] = "-nocontext";
-			char	command_3[] = "-nostacks";
-			char	*command[5];
+			std::string	pid_str = ss.str();
+			char	*command_1 = &(pid_str[0]);
+			char	command_2[] = "-nostacks";
+			char	*command[4];
 
 			command[0] = command_0;
 			command[1] = command_1;
 			command[2] = command_2;
-			command[3] = command_3;
-			command[4] = 0;
+			command[3] = 0;
 			int fd = open("./Srcs/Tmp/leaks", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 			if (fd == -1)
 				exit (2);
 			if (dup2(fd, 1) == -1)
+				exit (2);
+			if (dup2(fd, 2) == -1)
 				exit (2);
 			execvp(command_0, command);
 		}
