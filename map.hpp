@@ -56,6 +56,7 @@ namespace   ft {
 			key_compare			comp;
 			node *				root;
 			node *				nil_node;
+			size_type			_size;
 			
 	
 			node *new_node()
@@ -79,6 +80,7 @@ namespace   ft {
 				an->right = nil_node;
 				an->color = RED;
 				an->nil = false;
+				_size++;
 				return an;
 			}
 
@@ -107,6 +109,7 @@ namespace   ft {
 			{
 				alloc.destroy(x);
 				alloc.deallocate(x, 1);
+				_size--;
 			}
 
 			void deletedTree()
@@ -145,12 +148,13 @@ namespace   ft {
             {
 				nil_node = new_node();
 				root = nil_node;
+				_size = 0;
 			}
 
             template <class InputIterator>  
             map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type(),
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0): alloc(alloc), comp(comp) 
-			{	nil_node = new_node(); root = nil_node; insert(first, last);	};
+			{	nil_node = new_node(); root = nil_node; _size = 0; insert(first, last);	};
            
             map (const map& x)	{ nil_node = new_node(); root = nil_node; *this = x; };
 
@@ -163,6 +167,7 @@ namespace   ft {
 				alloc = x.alloc;
 				nil_node = new_node();
 				root = nil_node;
+				_size = 0;
 				insert(x.begin(), x.end());
 				return (*this);
 			};
@@ -202,8 +207,8 @@ max_size	Return maximum size (public member function)---------------------------
 
 		bool empty () const { return root == nil_node; };
 
-		size_type size () const 
-		{
+		// size_type size () const { return _size; }
+		size_type size () const{
 			size_type n = 0;
 			for (const_iterator it = begin() ;  it != end() ; it++)
 			{ n++; }
@@ -247,23 +252,18 @@ emplace_hint	Construct and insert element with hint (public member function)----
 				if (!it.getPtr()->nil)
 					return ft::make_pair(it, false);
 				node *n = insertNode(val);
-				
 				return ft::make_pair(iterator(n), true);
 			}
 	
 			iterator insert (iterator position, const value_type& val)
-			{
-				(void)position;
-				node *n = insertNode(val);
-				return iterator(n);
-			}
+			{ (void)position; return insert(val).first; }
 				
 			template <class InputIterator>  
 			void insert (InputIterator first, InputIterator last,
 						typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0 )
 			{	while(first != last) insert(*first++);	}
 
-			void erase (iterator position)	{	deleteNode(position.getPtr());	}
+			void erase (iterator position)	{	deleteNode(position.getPtr());}
 
 			size_type erase (const key_type& k)
 			{

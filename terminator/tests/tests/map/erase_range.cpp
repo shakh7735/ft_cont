@@ -44,8 +44,8 @@ void map_test_erase_range()
 
         it = m.begin();
         end = it;
-        // std::advance(it, 24);
-        // std::advance(end, 30);
+        std::advance(it, 24);
+        std::advance(end, 30);
 
         m.erase(it, end);
 

@@ -40,7 +40,12 @@
             size_type _size;
            
             
-            size_type increasingCapacity(size_type size){ return ((size == 0? 1 : size * 2)); }
+            size_type increasingCapacity(size_type n){ 
+                if (_capacity * 2 > (_size + n))
+                    return (_capacity * 2);
+                else
+                    return (_size + n);
+            }
            
             void deallocateArray()
             {
@@ -159,7 +164,7 @@
         
         void resize (size_type n, const value_type& val = value_type())
         {
-            reserve(n);
+            reserve(increasingCapacity(n));
             while (n < _size)	
                 pop_back();
 			while (n > _size)	
@@ -202,7 +207,7 @@
             size_type n = ft::distance(first, last);
             // std::cout << "distance = " << n << std::endl;
             clear();
-            reserve(n);
+            reserve(increasingCapacity(n));
             while (n > _size)	
 	    	    push_back(*(first++));
         }
@@ -210,14 +215,14 @@
         void assign (size_type n, const value_type& val)
         {
             clear();
-            reserve(n);
+            reserve(increasingCapacity(n));
             while (n > _size)	
 	    	    push_back(val);
         }
         
         void push_back(const value_type& elem) {
             if (_size >= _capacity)
-                reserve(increasingCapacity(_size));
+                reserve(increasingCapacity(1));
             _alloc.construct(arr + _size, elem);
             _size++;
         }
@@ -246,7 +251,7 @@
             size_type new_size = _size + n;
             
             if (new_size > _capacity)
-                new_cap = new_size;
+                new_cap = increasingCapacity(n);
             if (new_cap == 0 || n == 0)
                 return;
             if (new_cap > max_size())
@@ -281,7 +286,7 @@
             size_type new_size = _size + dist;
             
             if (new_size > _capacity)
-                new_cap = new_size;
+                new_cap = increasingCapacity(dist);
             
             if (new_cap == 0 || dist == 0 )
                 return ;

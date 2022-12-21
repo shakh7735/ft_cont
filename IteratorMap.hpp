@@ -12,13 +12,13 @@ namespace ft
     template <bool IsConst, class Val>
 		class IteratorMap { 
 			public:
-                typedef ft::node< Val >                                                             node;
 				typedef typename		ft::conditional<IsConst, const Val, Val>::type	            value_type;
+				typedef ft::node< Val >                                                             node;
 				typedef value_type*																	pointer;
 				typedef const value_type*															const_pointer;
 				typedef value_type&																	reference;
 				typedef const value_type&															const_reference;
-				typedef std::bidirectional_iterator_tag												iterator_category;
+				typedef ft::bidirectional_iterator_tag												iterator_category;
 				typedef					ptrdiff_t												difference_type;
 				typedef					std::size_t													size_type;
 			
@@ -34,8 +34,7 @@ namespace ft
 				template <bool B>
 				IteratorMap	(const IteratorMap<B, Val> & other, typename ft::enable_if<!B>::type* = 0)	: ptr(other.getPtr())	{}
 
-
-				IteratorMap &operator=	(const IteratorMap & other)	
+				IteratorMap &operator=	(const IteratorMap& other)	
 				{ ptr = other.getPtr(); return (*this); }
 
 				virtual ~IteratorMap	(void)	{}
