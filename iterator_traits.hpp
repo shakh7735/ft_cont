@@ -3,18 +3,94 @@
 
 # include "equal.hpp"
 # include <cstddef>
-# include <iterator>
+// # include <iterator>
 # include <typeinfo>
 # include <stdexcept>
 // # include "Iterator.hpp"
 
 namespace   ft {
 
-	struct input_iterator_tag { };
-	struct output_iterator_tag { };
-	struct forward_iterator_tag : public input_iterator_tag { };
-	struct bidirectional_iterator_tag : public forward_iterator_tag {};
-	struct random_access_iterator_tag : public bidirectional_iterator_tag {};
+	// struct input_iterator_tag { };
+	// struct output_iterator_tag { };
+	// struct forward_iterator_tag { };
+	// struct bidirectional_iterator_tag {};
+	// struct random_access_iterator_tag {};
+
+    class random_access_iterator_tag { };
+    class bidirectional_iterator_tag { };
+    class forward_iterator_tag { };
+    class input_iterator_tag { };
+    class output_iterator_tag { };
+
+///////////////////////////////////////////////////////////////////////////////////
+    template <bool is_valid, typename T>
+        struct valid_iterator_tag_res { typedef T type; const static bool value = is_valid; };
+    
+    /*
+    ** @brief Basic to check if the typename given
+    ** is an input_iterator. Based on valid_iterator_tag_res.
+    ** In this if the typename is not from the possible
+    ** input iterator form, validity is set to false.
+    */
+    template <typename T>
+        struct is_input_iterator_tagged : public valid_iterator_tag_res<false, T> { };
+
+    /* Check is_input_iterator_tagged from ft::random_access_iterator_tag */
+    template <>
+        struct is_input_iterator_tagged<ft::random_access_iterator_tag>
+            : public valid_iterator_tag_res<true, ft::random_access_iterator_tag> { };
+
+    /* Check is_input_iterator_tagged from ft::bidirectional_iterator_tag */
+    template <>
+        struct is_input_iterator_tagged<ft::bidirectional_iterator_tag>
+            : public valid_iterator_tag_res<true, ft::bidirectional_iterator_tag> { };
+
+    /* Check is_input_iterator_tagged from ft::forward_iterator_tag */
+    template <>
+        struct is_input_iterator_tagged<ft::forward_iterator_tag>
+            : public valid_iterator_tag_res<true, ft::forward_iterator_tag> { };
+
+    /* Check is_input_iterator_tagged from ft::input_iterator_tag */
+    template <>
+        struct is_input_iterator_tagged<ft::input_iterator_tag>
+            : public valid_iterator_tag_res<true, ft::input_iterator_tag> { };
+
+
+    /*
+    ** @brief This will return a structure
+    ** that contain a boolean "value" true if the
+    ** iterator given is tagged with a ft iterator
+    ** tag, otherwise "value" is false.
+    */
+    template <typename T>
+        struct is_ft_iterator_tagged : public valid_iterator_tag_res<false, T> { };
+    
+    /* Check is_ft_iterator_tagged from ft::random_access_iterator_tag */
+    template <>
+        struct is_ft_iterator_tagged<ft::random_access_iterator_tag>
+            : public valid_iterator_tag_res<true, ft::random_access_iterator_tag> { };
+
+    /* Check is_ft_iterator_tagged from ft::bidirectional_iterator_tag */
+    template <>
+        struct is_ft_iterator_tagged<ft::bidirectional_iterator_tag>
+            : public valid_iterator_tag_res<true, ft::bidirectional_iterator_tag> { };
+
+    /* Check is_ft_iterator_tagged from ft::forward_iterator_tag */
+    template <>
+        struct is_ft_iterator_tagged<ft::forward_iterator_tag>
+            : public valid_iterator_tag_res<true, ft::forward_iterator_tag> { };
+
+    /* Check is_ft_iterator_tagged from ft::input_iterator_tag */
+    template <>
+        struct is_ft_iterator_tagged<ft::input_iterator_tag>
+            : public valid_iterator_tag_res<true, ft::input_iterator_tag> { };
+
+    /* Check is_ft_iterator_tagged from ft::output_iterator_tag */
+    template <>
+        struct is_ft_iterator_tagged<ft::output_iterator_tag>
+            : public valid_iterator_tag_res<true, ft::output_iterator_tag> { };
+// /////////////////////////////////////////////////////////////////////////////////
+
 
 	// [ ITERATOR TRAITS ]
 	template <class Iterator>
@@ -57,6 +133,30 @@ namespace   ft {
 		while (first != last)		{	++n; ++first;	};
 		return n;
 	}
+
+     template <class Category, class T, class Distance = ptrdiff_t,  class Pointer = T*, class Reference = T&>
+        class iteratorT
+        {
+            public:
+                typedef T           value_type;
+                typedef Distance    difference_type;
+                typedef Pointer     pointer;
+                typedef Reference   reference;
+                typedef Category    iterator_category;
+        };
+
+    template <class T>
+        class bidirectional_iterator : ft::iteratorT<ft::bidirectional_iterator_tag, T>
+        {  
+            typedef typename ft::iteratorT<ft::bidirectional_iterator_tag, T>::iterator_category     iterator_category;
+            typedef typename ft::iteratorT<ft::bidirectional_iterator_tag, T>::value_type            value_type;
+            typedef typename ft::iteratorT<ft::bidirectional_iterator_tag, T>::difference_type       difference_type;
+            typedef typename ft::iteratorT<ft::bidirectional_iterator_tag, T>::pointer               pointer;
+            typedef typename ft::iteratorT<ft::bidirectional_iterator_tag, T>::reference             reference;
+            
+            private:
+                pointer _elem;
+        };
 //=========================================================================================================================
 	
 	// struct output_iterator_tag { };

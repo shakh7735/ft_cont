@@ -46,7 +46,7 @@ void map_test_random()
         PRINT_ALL(m);
 
         it = m.begin();
-        std::advance(it, 10);
+        // std::advance(it, 10);
 
         m.erase(it, m.end());
 

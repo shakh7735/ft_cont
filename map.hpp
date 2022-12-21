@@ -103,6 +103,12 @@ namespace   ft {
 				return tmp;
 			}
 
+			void destroyNode(node *x)
+			{
+				alloc.destroy(x);
+				alloc.deallocate(x, 1);
+			}
+
 			void deletedTree()
 			{
 				if (!root)
@@ -127,8 +133,7 @@ namespace   ft {
 					}
 					f->left->parent = f->parent;
 					f->right->parent = f->parent;
-					alloc.destroy(f);
-					alloc.deallocate(f, 1);
+					destroyNode(f);
 				}
 				
 				alloc.deallocate(nil_node, 1);
@@ -193,7 +198,7 @@ size	Return container size (public member function)
 max_size	Return maximum size (public member function)---------------------------*/
 		
 		// node *getRoot() { return root;} // cheking tree
-		node *getNil() { return nil_node;} // cheking tree  
+		// node *getNil() { return nil_node;} // cheking tree  
 
 		bool empty () const { return root == nil_node; };
 
@@ -374,115 +379,68 @@ equal_range	Get range of equal elements (public member function)----------------
 		
 /*Allocator:-----------------------------------------------------------------------
 get_allocator	Get allocator (public member function)-----------------------------*/
-			allocator_type get_allocator (void) const	{	return (allocator_type());	};
+			A get_allocator (void) const	{	return (A());	};
 
 //RBtree function=============================================================================
 		private:
 //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
 			void rotateLeft(node *x) {
-
-			/**************************
-				*  rotate node x to left *
-				**************************/
-
 				node *y = x->right;
-
-				/* establish x->right link */
 				x->right = y->left;
 				if (y->left != nil_node) y->left->parent = x;
-
-				/* establish y->parent link */
 				if (y != nil_node) y->parent = x->parent;
 				if (x->parent) {
 					if (x == x->parent->left)
 						x->parent->left = y;
 					else
 						x->parent->right = y;
-				} else {
-					root = y;
-				}
-
-				/* link x and y */
+				} else { root = y; }
 				y->left = x;
 				if (x != nil_node) x->parent = y;
 			}
 
 			void rotateRight(node *x) {
-
-			/****************************
-				*  rotate node x to right  *
-				****************************/
-
 				node *y = x->left;
-
-				/* establish x->left link */
 				x->left = y->right;
 				if (y->right != nil_node) y->right->parent = x;
-
-				/* establish y->parent link */
 				if (y != nil_node) y->parent = x->parent;
 				if (x->parent) {
 					if (x == x->parent->right)
 						x->parent->right = y;
 					else
 						x->parent->left = y;
-				} else {
-					root = y;
-				}
-
-				/* link x and y */
+				} else { root = y; 	}
 				y->right = x;
 				if (x != nil_node) x->parent = y;
 			}
 
 			void insertFixup(node *x) {
-
-			/*************************************
-				*  maintain Red-Black tree balance  *
-				*  after inserting node x           *
-				*************************************/
-
-				/* check Red-Black properties */
 				while (x != root && x->parent->color == RED) {
-					/* we have a violation */
 					if (x->parent == x->parent->parent->left) {
 						node *y = x->parent->parent->right;
 						if (y->color == RED) {
-
-							/* uncle is RED */
 							x->parent->color = BLACK;
 							y->color = BLACK;
 							x->parent->parent->color = RED;
 							x = x->parent->parent;
 						} else {
-
-							/* uncle is BLACK */
 							if (x == x->parent->right) {
-								/* make x a left child */
 								x = x->parent;
 								rotateLeft(x);
 							}
-
-							/* recolor and rotate */
 							x->parent->color = BLACK;
 							x->parent->parent->color = RED;
 							rotateRight(x->parent->parent);
 						}
 					} else {
-
-						/* mirror image of above code */
 						node *y = x->parent->parent->left;
 						if (y->color == RED) {
-
-							/* uncle is RED */
 							x->parent->color = BLACK;
 							y->color = BLACK;
 							x->parent->parent->color = RED;
 							x = x->parent->parent;
 						} else {
-
-							/* uncle is BLACK */
 							if (x == x->parent->left) {
 								x = x->parent;
 								rotateRight(x);
@@ -498,12 +456,6 @@ get_allocator	Get allocator (public member function)----------------------------
 
 			node *insertNode(const value_type& data) {
 				node *current, *parent, *x;
-
-			/***********************************************
-				*  allocate node for data and insert in tree  *
-				***********************************************/
-
-				/* find where node belongs */
 				current = root;
 				parent = 0;
 				while (current != nil_node) {
@@ -535,12 +487,6 @@ get_allocator	Get allocator (public member function)----------------------------
 			}
 
 			void deleteFixup(node *x) {
-
-			/*************************************
-				*  maintain Red-Black tree balance  *
-				*  after deleting node x            *
-				*************************************/
-
 				while (x != root && x->color == BLACK) {
 					if (x == x->parent->left) {
 						node *w = x->parent->right;
@@ -597,29 +543,19 @@ get_allocator	Get allocator (public member function)----------------------------
 
 			void deleteNode(node *z) {
 				node *x, *y;
-
-			/*****************************
-				*  delete node z from tree  *
-				*****************************/
-
 				if (!z || z == nil_node) return;
 				if (z->left == nil_node || z->right == nil_node) {
-					/* y has a nil_node node as a child */
 					y = z;
 				} else {
-					/* find tree successor with a nil_node node as a child */
 					y = z->right;
 					while (y->left != nil_node) y = y->left;
 				}
 
-				/* x is y's only child */
-				
 				if (y->left != nil_node)
 					x = y->left;
 				else
 					x = y->right;
 
-				/* remove y from the parent chain */
 				x->parent = y->parent;
 				if (y->parent)
 					if (y == y->parent->left)
@@ -633,7 +569,7 @@ get_allocator	Get allocator (public member function)----------------------------
 				
 				if (y->color == BLACK && x != nil_node) 	deleteFixup (x);
 				rightXod();
-				if (y != nil_node) {alloc.destroy(y); alloc.deallocate(y, 1);}
+				if (y != nil_node) destroyNode(y);
 			}
 
 			node *copy_data(node * a, node * b)
@@ -651,15 +587,12 @@ get_allocator	Get allocator (public member function)----------------------------
 					(a->parent->left == a ? a->parent->left = c : a->parent->right = c);
 				if (root == a)
 					root = c;
-				alloc.destroy(a);
-				alloc.deallocate(a, 1);
+				destroyNode(a);
 				return c;
 			}
 
 			bool equal_val (const key_type & lhs, const key_type & rhs) const
-			{
-				return (comp(lhs, rhs) == false && comp(rhs, lhs) == false);
-			}
+			{ return (comp(lhs, rhs) == false && comp(rhs, lhs) == false);	}
 
 //88888888888888888888888888888888888888888888888888888888888888888888888888888888888
 //END RBtree =================================================================================

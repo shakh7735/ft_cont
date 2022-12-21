@@ -21,7 +21,7 @@ namespace ft
 			typedef const U*								const_pointer;
 			typedef U&										reference;
 			typedef const U&								const_reference;
-			typedef ft::random_access_iterator_tag			iterator_category;
+			typedef std::random_access_iterator_tag			iterator_category;
 			typedef iterator< const U >						const_iterator;
 
 			iterator(void)					:	_it()		{};
@@ -86,7 +86,7 @@ namespace ft
 			typedef typename iterator_traits<iterator>::difference_type		difference_type;
 			typedef typename iterator_traits<iterator>::pointer				pointer;
 			typedef typename iterator_traits<iterator>::reference			reference;
-			typedef ft::random_access_iterator_tag							iterator_category;
+			typedef std::random_access_iterator_tag							iterator_category;
 
 		private:
 			iterator _it;

@@ -21,10 +21,10 @@ namespace	NS_TEST
 	{
 		std::ostringstream	ss;
 
-		// NS::map<char, int>			A;
-		// NS::pair<const char, int>	*p;
-		// p = A.get_allocator().allocate(42);
-		// A.get_allocator().deallocate(p, 42);
+		NS::map<char, int>			A;
+		NS::pair<const char, int>	*p;
+		p = A.get_allocator().allocate(42);
+		A.get_allocator().deallocate(p, 42);
 		_time = 0;
 		return (ss.str());
 	}

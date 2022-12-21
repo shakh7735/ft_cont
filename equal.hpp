@@ -9,6 +9,24 @@ namespace ft
 	template <class T>
 	struct enable_if<true, T>			{		typedef T type;		};
 
+	template <class T, class U>
+	struct is_same { static const bool value = false; };
+
+	template <class T>
+	struct is_same<T, T> { static const bool value = true; };
+
+	template <bool B, class T = void, class U = void>
+	struct conditional {};
+
+	template <class T, class U>
+	struct conditional<true, T, U> { typedef T type; };
+
+	template <class T, class U>
+	struct conditional<false, T, U> { typedef U type; };
+
+
+
+
 	template <class T, T v>
 	struct integral_constant
 	{
@@ -55,14 +73,6 @@ namespace ft
 	template <> struct
 		is_integral<bool>				:	public true_type		{};
 
-	template <bool B, class T = void, class U = void>
-	struct conditional {};
-
-	template <class T, class U>
-	struct conditional<true, T, U> { typedef T type; };
-
-	template <class T, class U>
-	struct conditional<false, T, U> { typedef U type; };
 
 	template<typename T>
 	void	swap(T &first, T& second)

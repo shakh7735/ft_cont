@@ -61,8 +61,9 @@ const std::string	map_example11(double &_time)
 		NS::pair<const char, int>	*p;
 		(void)p;
 
-		// p = A.get_allocator().allocate(42);
-		// A.get_allocator().deallocate(p, 42);
+		p = A.get_allocator().allocate(42);
+		A.get_allocator().deallocate(p, 42);
+		ss << "Allocator OK";
 		_time = 0;
 		return (ss.str());
 	}
@@ -86,6 +87,10 @@ const std::string	map_example22(double &_time)
 			else
 				v.push_back(it->first);
 		}
+		it = mp2.begin();
+
+        std::advance(it, 21);
+		
 		for (std::vector<int>::iterator it1 = v.begin(); it1 != v.end(); ++it1)
 			ss << " " << *it1;
 		_time = 0;
@@ -117,6 +122,6 @@ const std::string	map_example22(double &_time)
 int main()
 {
         double _time;
-    std::cout << map_example22(_time) << std::endl;
+    std::cout << map_example11(_time) << std::endl;
     return (0);
 }
