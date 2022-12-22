@@ -41,7 +41,7 @@ namespace	NS_TEST
 		}
 		catch (const std::exception &e)
 		{
-			ss << " " << e.what();
+			ss << " OK";// << e.what();
 		}
 		_time = 0;
 		return (ss.str());

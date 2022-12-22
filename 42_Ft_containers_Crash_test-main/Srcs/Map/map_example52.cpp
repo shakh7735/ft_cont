@@ -24,7 +24,7 @@ namespace	NS_TEST
 		clock_t				end;
 		NS::map<int, int>	mp;
 
-		start = clock();
+		// start = clock();
 
 		NS::map<int, int, std::greater<int> > mp2;
 		mp.insert(NS::make_pair(10, 10));

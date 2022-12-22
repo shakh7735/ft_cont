@@ -40,11 +40,13 @@
             size_type _size;
            
             
-            size_type increasingCapacity(size_type n){ 
-                if (_capacity * 2 > (_size + n))
-                    return (_capacity * 2);
-                else
-                    return (_size + n);
+            size_type increasingCapacity(size_type n) {
+                if (n + _size <= _capacity)
+                    return _capacity;
+                else if (n + _size > _size * 2)
+                    return (n + _size);
+                else 
+                    return (_size * 2);
             }
            
             void deallocateArray()
@@ -52,7 +54,7 @@
                 if (_capacity == 0)
                     return ;
                 while (_size > 0)
-                        pop_back();
+                    _alloc.destroy(&arr[--_size]);
                 if (_capacity > 0)
                     _alloc.deallocate(arr, _capacity);
                 _capacity = 0;
@@ -164,7 +166,8 @@
         
         void resize (size_type n, const value_type& val = value_type())
         {
-            reserve(increasingCapacity(n));
+            if (n > _capacity)
+                reserve(increasingCapacity(n - _size));
             while (n < _size)	
                 pop_back();
 			while (n > _size)	
@@ -207,7 +210,8 @@
             size_type n = ft::distance(first, last);
             // std::cout << "distance = " << n << std::endl;
             clear();
-            reserve(increasingCapacity(n));
+            if (n > _capacity)
+                reserve(increasingCapacity(n));
             while (n > _size)	
 	    	    push_back(*(first++));
         }
@@ -240,7 +244,8 @@
             for (; i < _size ; i++)
                 if (it++ == position)
                     break;
-            insert(position, 1, val); 
+            insert(position, 1, val);
+            // std::cout << " i = " << i << '\n'; 
             return (iterator(&arr[i]));
         }
         
@@ -255,7 +260,17 @@
             if (new_cap == 0 || n == 0)
                 return;
             if (new_cap > max_size())
-                throw std::length_error("_Maximum_size_out");
+                throw std::length_error("vector:_Maximum_size_out");
+            // else if (position < begin() && position > end())
+            //     throw std::logic_error("vector:insert error");
+            if (position == end())
+            {
+                while (_size < new_size)
+                    push_back(val);
+                _capacity = new_cap;
+                return;
+
+            }
             value_type *tmp = _alloc.allocate(new_cap);
             size_type i = 0;
             while(i < new_size){
@@ -293,6 +308,14 @@
             
             if (new_cap > max_size())
                 throw std::length_error("_Maximum_size_out");
+            if (position == end())
+            {
+                while (first != last)
+                    push_back(*first++);
+                _capacity = new_cap;
+                return;
+            }
+            
             value_type *tmp = _alloc.allocate(new_cap);
 
             size_type i = 0;
@@ -323,7 +346,6 @@
             iterator it = begin();
             if (dist == 0)
                 return it;
-
             for (size_type i = 0; i < _size; i++) {
                 if (it == first) {
                     ind_first = (int)i;
@@ -347,7 +369,11 @@
 				ft::swap(_size, other._size);
         }
         
-        void clear() {   while (_size > 0) pop_back();  }
+        void clear() {
+            for (size_type i = 0; i < _size; ++i)
+                _alloc.destroy(_alloc.address(*(arr + i)));
+            _size = 0;
+        }
         
  // ============================================================================
  

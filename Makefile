@@ -21,6 +21,8 @@ MAGENTA		= \033[0;95m
 CYAN		= \033[0;96m
 WHITE		= \033[0;97m
 
+defines_ft="-D NS=ft";
+defines_std="-D NS=std";
 
 all: $(NAME)
 
@@ -40,6 +42,7 @@ re: fclean all
 
 run : re
 	@./$(NAME)
+	
 	@rm -rf $(OBJS)
 	@rm -rf $(NAME)
 

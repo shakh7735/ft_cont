@@ -56,7 +56,7 @@ namespace   ft {
 			key_compare			comp;
 			node *				root;
 			node *				nil_node;
-			size_type			_size;
+			size_type			_size = 0;
 			
 	
 			node *new_node()
@@ -148,15 +148,18 @@ namespace   ft {
             {
 				nil_node = new_node();
 				root = nil_node;
-				_size = 0;
 			}
 
             template <class InputIterator>  
             map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type(),
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0): alloc(alloc), comp(comp) 
-			{	nil_node = new_node(); root = nil_node; _size = 0; insert(first, last);	};
+			{	nil_node = new_node(); root = nil_node; insert(first, last);	};
            
-            map (const map& x)	{ nil_node = new_node(); root = nil_node; *this = x; };
+            map (const map& x) :  alloc(x.alloc), comp(x.comp){
+				nil_node =new_node();
+				root = nil_node;
+				insert(x.begin(), x.end());
+			 };
 
 			map & operator= (const map & x)
 			{
@@ -165,9 +168,8 @@ namespace   ft {
 				deletedTree();
 				comp = x.comp;
 				alloc = x.alloc;
-				nil_node = new_node();
+				nil_node =new_node();
 				root = nil_node;
-				_size = 0;
 				insert(x.begin(), x.end());
 				return (*this);
 			};
@@ -207,13 +209,13 @@ max_size	Return maximum size (public member function)---------------------------
 
 		bool empty () const { return root == nil_node; };
 
-		// size_type size () const { return _size; }
-		size_type size () const{
-			size_type n = 0;
-			for (const_iterator it = begin() ;  it != end() ; it++)
-			{ n++; }
-			return (n);
-		};
+		size_type size () const { return this->_size; }
+		// size_type size () const{
+		// 	size_type n = 0;
+		// 	for (const_iterator it = begin() ;  it != end() ; it++)
+		// 	{ n++; }
+		// 	return (n);
+		// };
 
 		size_type max_size () const	{	return (alloc.max_size());	};
 
@@ -279,8 +281,11 @@ emplace_hint	Construct and insert element with hint (public member function)----
 			void swap (map& x)	{ 
 				node *tmp = root; 
 				node *tmp_nil = nil_node;
+				size_type st = _size;
 				root = x.root;
 				nil_node = x.nil_node;
+				_size = x._size;
+				x._size = st;
 				x.root = tmp;
 				x.nil_node = tmp_nil;	
 			};
@@ -339,7 +344,7 @@ equal_range	Get range of equal elements (public member function)----------------
 		{
 			iterator it = begin();
 			while (comp(it->first, k) && it != end())
-				it++;
+				++it;
 			return (it);
 		}
 
@@ -347,7 +352,7 @@ equal_range	Get range of equal elements (public member function)----------------
 		{
 			const_iterator it = begin();
 			while (comp(it->first, k) && it != end())
-				it++;
+				++it;
 			return (it);
 		}
 
@@ -355,7 +360,7 @@ equal_range	Get range of equal elements (public member function)----------------
 		{
 			iterator it = begin();
 			while (!comp(k, it->first) && it != end())
-				it++;
+				++it;
 			return (it);
 		}
 
@@ -363,7 +368,7 @@ equal_range	Get range of equal elements (public member function)----------------
 		{
 			const_iterator it = begin();
 			while (!comp(k, it->first) && it != end())
-				it++;
+				++it;
 			return (it);
 		}
 
@@ -565,7 +570,8 @@ get_allocator	Get allocator (public member function)----------------------------
 				else
 					root = x;
 
-				if (y != z) z = copy_data(z, y); // z->data = y->data;
+				if (y != z) z = copy_data(z, y);
+				// if (y != z) z->data = y->data;
 				
 				if (y->color == BLACK && x != nil_node) 	deleteFixup (x);
 				rightXod();
