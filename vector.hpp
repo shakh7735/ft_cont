@@ -43,10 +43,10 @@
             size_type increasingCapacity(size_type n) {
                 if (n + _size <= _capacity)
                     return _capacity;
-                else if (n + _size > _size * 2)
+                else if (n + _size > _capacity * 2)
                     return (n + _size);
                 else 
-                    return (_size * 2);
+                    return (_capacity * 2);
             }
            
             void deallocateArray()
@@ -207,21 +207,16 @@
 		void		assign( InputIterator first, InputIterator last,
 							typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0 )
         {
-            size_type n = ft::distance(first, last);
-            // std::cout << "distance = " << n << std::endl;
             clear();
-            if (n > _capacity)
-                reserve(increasingCapacity(n));
-            while (n > _size)	
-	    	    push_back(*(first++));
+            reserve(ft::distance(first, last));
+            insert(begin(), first, last);
         }
         
         void assign (size_type n, const value_type& val)
         {
             clear();
-            reserve(increasingCapacity(n));
-            while (n > _size)	
-	    	    push_back(val);
+            reserve(n);
+            insert(begin(), n, val);
         }
         
         void push_back(const value_type& elem) {
@@ -295,8 +290,8 @@
 			void	insert( iterator position, InputIterator first, InputIterator last,
 							typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)
         {
-            if(typeid(typename InputIterator::value_type) == typeid(typename ft::iterator<T>::value_type))
-                throw std::logic_error("vector:insert error");
+            // if(typeid(typename InputIterator::value_type) == typeid(typename ft::iterator<T>::value_type))
+                // throw std::logic_error("vector:insert error");
             iterator pos = begin();
             size_type new_cap = _capacity;
             size_type dist = ft::distance(first, last);

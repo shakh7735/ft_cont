@@ -56,7 +56,7 @@ namespace   ft {
 			key_compare			comp;
 			node *				root;
 			node *				nil_node;
-			size_type			_size = 0;
+			size_type			_size;
 			
 	
 			node *new_node()
@@ -146,6 +146,7 @@ namespace   ft {
 // CONSTRUCTORS-------------------------------------------------------------------
             explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : alloc(alloc), comp(comp)	
             {
+				_size = 0;
 				nil_node = new_node();
 				root = nil_node;
 			}
@@ -153,9 +154,10 @@ namespace   ft {
             template <class InputIterator>  
             map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type(),
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0): alloc(alloc), comp(comp) 
-			{	nil_node = new_node(); root = nil_node; insert(first, last);	};
+			{	_size = 0; nil_node = new_node(); root = nil_node; insert(first, last);	};
            
             map (const map& x) :  alloc(x.alloc), comp(x.comp){
+				_size = 0;
 				nil_node =new_node();
 				root = nil_node;
 				insert(x.begin(), x.end());
@@ -168,6 +170,7 @@ namespace   ft {
 				deletedTree();
 				comp = x.comp;
 				alloc = x.alloc;
+				_size = 0;
 				nil_node =new_node();
 				root = nil_node;
 				insert(x.begin(), x.end());

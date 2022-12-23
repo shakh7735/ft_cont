@@ -21,7 +21,10 @@ namespace	NS_TEST
 	{
 		A* operator &() const
 		{
-			std::cout << "error ";
+			//std::cout << std::endl;
+		//	NS_TEST::sss += "error ";
+			// exit (1);
+			throw std::out_of_range("Error");
 			return (0);
 		}
 	};
@@ -36,6 +39,7 @@ namespace	NS_TEST
 		vec.reserve(20);
 		ss << " " << vec.capacity();
 		ss << " " << vec.size();
+
 		_time = 0;
 		return (ss.str());
 	}

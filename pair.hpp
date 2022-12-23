@@ -28,19 +28,19 @@ namespace   ft {
     
         pair() : first(), second() {};
 
-        template<class U, class V>
-        pair (const pair<U, V>& pr) : 
-            first(pr.first), second(pr.second) {};
+        template <typename U1, typename U2>
+	    pair(const pair<U1, U2> &other) :  first(other.first),  second(other.second)        {}   
 
         pair (const first_type& a, const second_type& b) : 
             first(a), second(b) {};
 
-        // pair const &operator= (const pair& pr)
-        // {
-        //     if ( *this != pr )	
-        //     {	pair const x(pr.first,pr.second); *this = &x; return *this;	}
-		// 	return *this;
-        // }
+        pair const &operator= (const pair& pr)
+        {
+            if ( *this != pr )	
+            {	this->first = pr.first;
+			this->second = pr.second; }
+			return *this;
+        }
     };
 
     

@@ -131,19 +131,19 @@ namespace   ft {
                 pointer _elem;
         };
 
-    template <typename T>
-    class InvalidIteratorException : public std::exception
-    {
-        private:
-            std::string _msg;
+    // template <typename T>
+    // class InvalidIteratorException : public std::exception
+    // {
+    //     private:
+    //         std::string _msg;
         
-        public :
-            InvalidIteratorException () throw() { _msg = "Is invalid iterator tag : " + std::string(typeid(T).name()); }
-            InvalidIteratorException (const InvalidIteratorException&) throw() {}
-            InvalidIteratorException& operator= (const InvalidIteratorException&) throw() {}
-            virtual ~InvalidIteratorException() throw() {}
-            virtual const char* what() const throw() { return (_msg.c_str()); }
-    };
+    //     public :
+    //         InvalidIteratorException () throw() { _msg = "Is invalid iterator tag : " + std::string(typeid(T).name()); }
+    //         InvalidIteratorException (const InvalidIteratorException&) throw() {}
+    //         InvalidIteratorException& operator= (const InvalidIteratorException&) throw() {}
+    //         virtual ~InvalidIteratorException() throw() {}
+    //         virtual const char* what() const throw() { return (_msg.c_str()); }
+    // };
 
 }
 
