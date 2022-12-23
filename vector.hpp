@@ -295,6 +295,8 @@
 			void	insert( iterator position, InputIterator first, InputIterator last,
 							typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)
         {
+            if(typeid(typename InputIterator::value_type) == typeid(typename ft::iterator<T>::value_type))
+                throw std::logic_error("vector:insert error");
             iterator pos = begin();
             size_type new_cap = _capacity;
             size_type dist = ft::distance(first, last);
@@ -340,26 +342,20 @@
         
         iterator erase (iterator first, iterator last)
         {
-            int ind_first = -1;
             size_type dist = ft::distance(first, last);
-            
-            iterator it = begin();
+            // iterator it = begin();
+            // while(first != it++);
+            // while(last != it++) dist++;
             if (dist == 0)
-                return it;
-            for (size_type i = 0; i < _size; i++) {
-                if (it == first) {
-                    ind_first = (int)i;
-                }
-                if ( ind_first != -1 ) {
-                    _alloc.destroy(&(*it));
-                    if (i + dist < _size) {
-                        _alloc.construct(&(*it), arr[i + dist]);
-                    }
-                }
-                it++;
+                return begin();
+            size_type i = ft::distance(begin(), first);
+            for (; i < _size - dist; i++) {
+                _alloc.destroy(&(arr[i]));
+                _alloc.construct(&(arr[i]), arr[i + dist]); 
+                _alloc.destroy(&(arr[i + dist]));
             }
             _size -= dist;
-            return first ;
+            return first;
         }
         
         void swap( vector& other ) {
