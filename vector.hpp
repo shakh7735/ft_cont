@@ -290,7 +290,7 @@
 			void	insert( iterator position, InputIterator first, InputIterator last,
 							typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)
         {
-            // if(typeid(typename InputIterator::value_type) == typeid(typename ft::iterator<T>::value_type))
+            // if(typeid(typename InputIterator::value_type) == typeid(typename ft::iterator::value_type))
                 // throw std::logic_error("vector:insert error");
             iterator pos = begin();
             size_type new_cap = _capacity;

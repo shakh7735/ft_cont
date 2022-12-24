@@ -36,7 +36,7 @@ void map_test_erase_range()
         intmap::iterator it(m.begin());
         intmap::iterator end(it);
 
-        std::advance(end, 1);
+        // std::advance(end, 1);
 
         m.erase(it, end);
 
@@ -44,8 +44,8 @@ void map_test_erase_range()
 
         it = m.begin();
         end = it;
-        std::advance(it, 24);
-        std::advance(end, 30);
+        // std::advance(it, 24);
+        // std::advance(end, 30);
 
         m.erase(it, end);
 
@@ -53,7 +53,7 @@ void map_test_erase_range()
 
         it = m.begin();
         end = it;
-        // std::advance(it, 34);
+        std::advance(it, 34);
         std::advance(end, 55);
 
         m.erase(it, end);

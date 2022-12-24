@@ -279,7 +279,14 @@ emplace_hint	Construct and insert element with hint (public member function)----
 				return 1;
 			}
 
-			void erase (iterator first, iterator last) { while(first != last) erase(first++); }
+			void erase (iterator first, iterator last) {
+				iterator it = first;
+				while(first != last) {
+					++it;
+					erase(first);
+					first = it;
+				}
+			}
 			
 			void swap (map& x)	{ 
 				node *tmp = root; 
@@ -573,8 +580,8 @@ get_allocator	Get allocator (public member function)----------------------------
 				else
 					root = x;
 
-				if (y != z) z = copy_data(z, y);
-				// if (y != z) z->data = y->data;
+				// if (y != z) z = copy_data(z, y);
+				if (y != z) z->data = y->data;
 				
 				if (y->color == BLACK && x != nil_node) 	deleteFixup (x);
 				rightXod();
@@ -583,7 +590,7 @@ get_allocator	Get allocator (public member function)----------------------------
 
 			node *copy_data(node * a, node * b)
 			{
-				if (a == nil_node || a == b) return a; 
+				if (a->nil || a == b) return a; 
 				node *c = new_node(b->data);
 				c->parent = a->parent;
 				c->left = a->left;

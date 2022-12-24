@@ -21,6 +21,14 @@ namespace ft{
        
         node ( void )    :   data(0), left(0), 
                 right(0), parent (0), nil(true), color( BLACK ) {}
+        
+        // node&	operator=( const node& other )
+        // {
+        //     this->parent = other.parent;
+        //     this->rightChild = other.rightChild;
+        //     this->leftChild = other.leftChild;
+        //     this->color = other.color;
+        // }
     } ;
 
 //     //RBtree function=============================================================================

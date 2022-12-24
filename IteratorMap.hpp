@@ -55,7 +55,7 @@ namespace ft
 				
 				IteratorMap<IsConst, Val> 	base	() 	{ return (*this);}
 				
-				operator  IteratorMap<false, Val>  () const		{	return IteratorMap<false, Val>(ptr);		};
+				// operator  IteratorMap<false, Val>  () const		{	return IteratorMap<false, Val>(ptr);		};
 				
 			private:
 
@@ -114,8 +114,8 @@ namespace ft
 				typedef const value_type*								const_pointer;
 				typedef value_type&										reference;
 				typedef const value_type&								const_reference;
-				typedef std::bidirectional_iterator_tag					reverse_iterator_category;
-				typedef IteratorMap<IsRConst, Val>					iterator;
+				typedef IteratorMap<IsRConst, Val>						iterator;
+				typedef typename iterator::iterator_category			reverse_iterator_category;
 			
 			private:
 				iterator b_it;

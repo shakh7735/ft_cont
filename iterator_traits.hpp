@@ -3,7 +3,7 @@
 
 # include "equal.hpp"
 # include <cstddef>
-// # include <iterator>
+# include <iterator>
 # include <typeinfo>
 # include <stdexcept>
 // # include "Iterator.hpp"
@@ -16,52 +16,52 @@ namespace   ft {
 	// struct bidirectional_iterator_tag {};
 	// struct random_access_iterator_tag {};
 
-    class random_access_iterator_tag { };
-    class bidirectional_iterator_tag { };
-    class forward_iterator_tag { };
-    class input_iterator_tag { };
-    class output_iterator_tag { };
+    typedef std::random_access_iterator_tag   random_access_iterator_tag;
+    typedef std::bidirectional_iterator_tag    bidirectional_iterator_tag;
+    // class forward_iterator_tag { };
+    // class input_iterator_tag { };
+    // class output_iterator_tag { };
 
 ///////////////////////////////////////////////////////////////////////////////////
-    template <bool is_valid, typename T>
-        struct valid_iterator_tag_res { typedef T type; const static bool value = is_valid; };
-    template <typename T>
-        struct is_input_iterator_tagged : public valid_iterator_tag_res<false, T> { };
-    template <>
-        struct is_input_iterator_tagged<ft::random_access_iterator_tag>
-            : public valid_iterator_tag_res<true, ft::random_access_iterator_tag> { };
-    template <>
-        struct is_input_iterator_tagged<ft::bidirectional_iterator_tag>
-            : public valid_iterator_tag_res<true, ft::bidirectional_iterator_tag> { };
-    template <>
-        struct is_input_iterator_tagged<ft::forward_iterator_tag>
-            : public valid_iterator_tag_res<true, ft::forward_iterator_tag> { };
-    template <>
-        struct is_input_iterator_tagged<ft::input_iterator_tag>
-            : public valid_iterator_tag_res<true, ft::input_iterator_tag> { };
+    // template <bool is_valid, typename T>
+    //     struct valid_iterator_tag_res { typedef T type; const static bool value = is_valid; };
+    // template <typename T>
+    //     struct is_input_iterator_tagged : public valid_iterator_tag_res<false, T> { };
+    // template <>
+    //     struct is_input_iterator_tagged<ft::random_access_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::random_access_iterator_tag> { };
+    // template <>
+    //     struct is_input_iterator_tagged<ft::bidirectional_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::bidirectional_iterator_tag> { };
+    // template <>
+    //     struct is_input_iterator_tagged<ft::forward_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::forward_iterator_tag> { };
+    // template <>
+    //     struct is_input_iterator_tagged<ft::input_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::input_iterator_tag> { };
 
-    template <typename T>
-        struct is_ft_iterator_tagged : public valid_iterator_tag_res<false, T> { };
+    // template <typename T>
+    //     struct is_ft_iterator_tagged : public valid_iterator_tag_res<false, T> { };
     
-    template <>
-        struct is_ft_iterator_tagged<ft::random_access_iterator_tag>
-            : public valid_iterator_tag_res<true, ft::random_access_iterator_tag> { };
+    // template <>
+    //     struct is_ft_iterator_tagged<ft::random_access_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::random_access_iterator_tag> { };
 
-    template <>
-        struct is_ft_iterator_tagged<ft::bidirectional_iterator_tag>
-            : public valid_iterator_tag_res<true, ft::bidirectional_iterator_tag> { };
+    // template <>
+    //     struct is_ft_iterator_tagged<ft::bidirectional_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::bidirectional_iterator_tag> { };
 
-    template <>
-        struct is_ft_iterator_tagged<ft::forward_iterator_tag>
-            : public valid_iterator_tag_res<true, ft::forward_iterator_tag> { };
+    // template <>
+    //     struct is_ft_iterator_tagged<ft::forward_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::forward_iterator_tag> { };
 
-    template <>
-        struct is_ft_iterator_tagged<ft::input_iterator_tag>
-            : public valid_iterator_tag_res<true, ft::input_iterator_tag> { };
+    // template <>
+    //     struct is_ft_iterator_tagged<ft::input_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::input_iterator_tag> { };
 
-    template <>
-        struct is_ft_iterator_tagged<ft::output_iterator_tag>
-            : public valid_iterator_tag_res<true, ft::output_iterator_tag> { };
+    // template <>
+    //     struct is_ft_iterator_tagged<ft::output_iterator_tag>
+    //         : public valid_iterator_tag_res<true, ft::output_iterator_tag> { };
 // /////////////////////////////////////////////////////////////////////////////////
 
 

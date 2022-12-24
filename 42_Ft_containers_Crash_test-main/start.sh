@@ -88,7 +88,7 @@ VECTOR_FUNCTIONS=(
 					"vec_example9"
 					"vec_example10"
 					"vec_example11"
-					"vec_example12"
+					# "vec_example12"
 					"vec_example13"
 					"vec_example14"
 					"vec_example15"

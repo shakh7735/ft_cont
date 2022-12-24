@@ -1,10 +1,11 @@
 NAME		= test
-SSRCSDIR	= ./
+SSRCSDIR	= ./test_files/Vector/
 OBJSDIR		= objs
 INCLUDES	= ./
 
 
 SRCS		= main.cpp
+# SRCS		+= test_files/Vector/vec_example42.cpp
 OBJS		= $(SRCS:.cpp=.o)
 
 CXX			= c++
