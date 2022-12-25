@@ -20,7 +20,7 @@
 #include "vector.hpp"
 // #include "./Vector/vec_example42.cpp"
 // #include "./test_files/test.hpp"
-#define NS std
+#define NS ft
 
 
 // template <typename T>
@@ -272,20 +272,20 @@ class	B
 		std::ostringstream	ss;
 		clock_t				start;
 		clock_t				end;
-		NS::vector<int>		_vector;
+		// NS::vector<int>		_vector;
 
-		NS::vector<int>		tmp;
-		tmp.assign(26000000, 1);
-		_vector.assign(42000000, 1);
+		// NS::vector<int>		tmp;
+		// tmp.assign(26000000, 1);
+		// _vector.assign(42000000, 1);
 
 		start = clock();
-		_vector.insert(_vector.end() - 10000000, tmp.begin(), tmp.end());
+		// _vector.insert(_vector.end() - 10000000, tmp.begin(), tmp.end());
 		end = clock();
 		_time = (double)(end - start);
 
-		ss << " " << (_vector[3]);
-		ss << " " << (_vector.size());
-		ss << " " << (_vector.capacity());
+		// ss << " " << (_vector[3]);
+		// ss << " " << (_vector.size());
+		// ss << " " << (_vector.capacity());
 
 		std::unique_ptr<B> k2(new B(3));
 		std::unique_ptr<B> k3(new B(4));
@@ -294,6 +294,7 @@ class	B
 		NS::vector<A>	vv;
 		NS::vector<B*>	v1;
 
+		
 		v1.push_back(&(*k2));
 		v1.push_back(&(*k3));
 		v1.push_back(&(*k4));
@@ -303,10 +304,10 @@ class	B
 		}
 		catch (...)
 		{
+			
 			ss << " " << (vv.size());
 			ss << " " << (vv.capacity());
 		}
-
 		return (ss.str());
 	}
 

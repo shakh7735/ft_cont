@@ -580,8 +580,8 @@ get_allocator	Get allocator (public member function)----------------------------
 				else
 					root = x;
 
-				// if (y != z) z = copy_data(z, y);
-				if (y != z) z->data = y->data;
+				if (y != z) z = copy_data(z, y);
+				// if (y != z) z->data = y->data;
 				
 				if (y->color == BLACK && x != nil_node) 	deleteFixup (x);
 				rightXod();

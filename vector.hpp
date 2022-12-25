@@ -54,7 +54,7 @@
                 if (_capacity == 0)
                     return ;
                 while (_size > 0)
-                    _alloc.destroy(&arr[--_size]);
+                    _alloc.destroy(_alloc.address(arr[--_size]));
                 if (_capacity > 0)
                     _alloc.deallocate(arr, _capacity);
                 _capacity = 0;
@@ -209,7 +209,8 @@
         {
             clear();
             reserve(ft::distance(first, last));
-            insert(begin(), first, last);
+            for (; first != last; ++first)
+                    push_back(*first);
         }
         
         void assign (size_type n, const value_type& val)
@@ -228,7 +229,7 @@
         
         void pop_back(void) {
             if (_size > 0) {
-                _alloc.destroy(&(arr [_size - 1]));
+                _alloc.destroy(_alloc.address(arr [_size - 1]));
                 _size--;
             }
         }
@@ -240,8 +241,7 @@
                 if (it++ == position)
                     break;
             insert(position, 1, val);
-            // std::cout << " i = " << i << '\n'; 
-            return (iterator(&arr[i]));
+            return (iterator(arr + i));
         }
         
         void insert (iterator position, size_type n, const T& val)
@@ -271,12 +271,12 @@
             while(i < new_size){
                 if (pos == position) {
                     while (n > 0) {
-                        _alloc.construct(&tmp[i++], val);
+                        _alloc.construct(_alloc.address(tmp[i++]), val);
                         n--;
                     }
                 }
                 if (pos != end())
-                    _alloc.construct(&tmp[i++], (*pos));
+                    _alloc.construct(_alloc.address(tmp[i++]), (*pos));
                 ++pos;
             }
             deallocateArray();
@@ -290,11 +290,12 @@
 			void	insert( iterator position, InputIterator first, InputIterator last,
 							typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)
         {
-            // if(typeid(typename InputIterator::value_type) == typeid(typename ft::iterator::value_type))
-                // throw std::logic_error("vector:insert error");
             iterator pos = begin();
             size_type new_cap = _capacity;
+            
             size_type dist = ft::distance(first, last);
+            
+
             size_type new_size = _size + dist;
             
             if (new_size > _capacity)
@@ -305,26 +306,40 @@
             
             if (new_cap > max_size())
                 throw std::length_error("_Maximum_size_out");
-            if (position == end())
-            {
-                while (first != last)
-                    push_back(*first++);
-                _capacity = new_cap;
-                return;
-            }
+            // if (position == end())
+            // {
+            //     while (first != last)
+            //         push_back(*first++);
+            //     _capacity = new_cap;
+            //     return;
+            // }
             
             value_type *tmp = _alloc.allocate(new_cap);
-
+            // std::cout << " insert InputIterator\n";
+            // typename InputIterator::value_type val;
             size_type i = 0;
             size_type a = 0;
+            size_type e = 0;
             while(i < new_size){
                 if (pos == position) {
                     while (first != last) {
-                        _alloc.construct(&tmp[i++], (*first++));
+                        try
+                        {
+                            e++;
+                            _alloc.construct(_alloc.address(tmp[i++]), *first++);
+                            
+                        }
+                        catch(...)
+                        {
+                            while (e-- > 0)
+                                _alloc.destroy(_alloc.address(tmp[--i]));
+                            _alloc.deallocate(tmp, new_cap);
+                            throw ;
+                        }        
                     }
                 }
                 if (pos != end())
-                    _alloc.construct(&tmp[i++], arr[a++]);
+                    _alloc.construct(_alloc.address(tmp[i++]), arr[a++]);
                 ++pos;
             }
             deallocateArray();
@@ -345,9 +360,9 @@
                 return begin();
             size_type i = ft::distance(begin(), first);
             for (; i < _size - dist; i++) {
-                _alloc.destroy(&(arr[i]));
-                _alloc.construct(&(arr[i]), arr[i + dist]); 
-                _alloc.destroy(&(arr[i + dist]));
+                _alloc.destroy(_alloc.address(arr[i]));
+                _alloc.construct(_alloc.address(arr[i]), arr[i + dist]); 
+                _alloc.destroy(_alloc.address(arr[i + dist]));
             }
             _size -= dist;
             return first;
@@ -362,7 +377,7 @@
         
         void clear() {
             for (size_type i = 0; i < _size; ++i)
-                _alloc.destroy(_alloc.address(*(arr + i)));
+                _alloc.destroy(_alloc.address(arr[i]));
             _size = 0;
         }
         

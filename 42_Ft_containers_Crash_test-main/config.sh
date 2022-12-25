@@ -4,5 +4,5 @@
 # Write correct path to your containers
 
 vector='../vector.hpp'
-# stack='../stack.hpp'
-# map='../map.hpp'
+stack='../stack.hpp'
+map='../map.hpp'
